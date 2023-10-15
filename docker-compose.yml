@@ -12,6 +12,8 @@ services:
       - "14501:14501"
     volumes:
       - $PWD/config/aprsc.conf:/opt/aprsc/etc/aprsc.conf
+    networks:
+      - caddy
 
   collector:
     restart: always
@@ -24,6 +26,8 @@ services:
     depends_on:
       - "db"
       - "aprsc"
+    networks:
+      - caddy
 
   websocket:
     restart: always
@@ -38,6 +42,12 @@ services:
     depends_on:
       - "db"
       - "aprsc"
+    networks:
+      - caddy
+    labels:
+      caddy: waprs.dead.guru
+      caddy.reverse_proxy: "{{upstreams 9000}}"
+      caddy.tls: "assada.ua@gmail.com"
 
   web:
     restart: always
@@ -51,10 +61,16 @@ services:
       - $PWD/htdocs/public/css:/root/trackdirect/htdocs/public/css
       - $PWD/config/trackdirect.ini:/root/trackdirect/config/trackdirect.ini
       - $PWD/heatmaps:/root/trackdirect/htdocs/public/heatmaps
-    ports:
-      - "80:80"
+#    ports:
+#      - "80:80"
     depends_on:
       - "db"
+    networks:
+      - caddy
+    labels:
+      caddy: aprs.dead.guru
+      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy.tls: "assada.ua@gmail.com"
 
   db:
     restart: always
@@ -67,3 +83,9 @@ services:
       POSTGRES_DB: trackdirect
     volumes:
       - $PWD/db:/var/lib/postgresql/data
+    networks:
+      - caddy
+networks:
+  caddy:
+    name: dead-services
+    external: true
