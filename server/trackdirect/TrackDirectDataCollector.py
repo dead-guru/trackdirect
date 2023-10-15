@@ -230,7 +230,6 @@ class TrackDirectDataCollector():
         is_it_pidor = any(packet.senderName.startswith(item) for item in self.block_list)
 
         if (is_it_pidor):
-            self.logger.warning("Pidor: " + packet.senderName)
             return
 
         # Soft frequency limit check
