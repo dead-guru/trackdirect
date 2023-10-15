@@ -1,6 +1,7 @@
 import logging
 
 import time
+import string
 
 import aprslib
 
@@ -56,7 +57,7 @@ class AprsISPayloadCreator():
         for num in range(0, 9):
             block_list.append("R" + str(num))
 
-        block_list.append("UU")
+        # block_list.append("UU") Crimea
 
         return block_list
 
