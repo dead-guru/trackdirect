@@ -5,6 +5,7 @@ import re
 import aprslib
 import datetime
 import time
+import string
 from twisted.internet import reactor, threads
 
 from trackdirect.parser.AprsPacketParser import AprsPacketParser
@@ -58,11 +59,33 @@ class TrackDirectDataCollector():
         self.firstPacketTimestamp = None
         self.latestBatchInsertTimestamp = int(time.time())
 
+        self.block_list = self.fillBlockList()
+
         self.packets = []
         self.stationIdsWithVisiblePacket = []
         self.movingStationIdsWithVisiblePacket = []
         self.movingMarkerIdsWithVisiblePacket = []
         self.delay = 0
+
+    def fillBlockList(self):
+        """Fill block list with stations that should be ignored
+        """
+        block_list = []
+        ascii_uppercase = list(string.ascii_uppercase)
+        for letter in ascii_uppercase:
+            block_list.append("R" + letter)
+
+        for letter in ascii_uppercase:
+            block_list.append("U" + letter)
+            if letter == "I":
+                break
+
+        for num in range(0, 9):
+            block_list.append("R" + str(num))
+
+        block_list.append("UU")
+
+        return block_list
 
     def run(self):
         """Start the collector
@@ -202,6 +225,12 @@ class TrackDirectDataCollector():
             packet (Packet):   The packet
         """
         if (packet is None):
+            return
+
+        is_it_pidor = any(packet.senderName.startswith(item) for item in self.block_list)
+
+        if (is_it_pidor):
+            self.logger.warning("Pidor: " + packet.senderName)
             return
 
         # Soft frequency limit check
