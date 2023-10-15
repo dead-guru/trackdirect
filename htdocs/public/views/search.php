@@ -23,15 +23,15 @@
     <form id="station-search-form" method="get" action="">
         <div style="margin-bottom: 5px;">
             <select name ="seconds" style="width: 280px;" id="station-search-form-seconds">
-                <option <?php echo ($seconds == 0 ? 'selected' : ''); ?> value="0">Include all known stations in search</option>
-                <option <?php echo ($seconds == 60 ? 'selected' : ''); ?> value="60">Only stations active latest hour</option>
-                <option <?php echo ($seconds == 360 ? 'selected' : ''); ?> value="360">Only stations active latest 6 hours</option>
-                <option <?php echo ($seconds == 720 ? 'selected' : ''); ?> value="720">Only stations active latest 12 hours</option>
+                <option <?php echo ($seconds == 0 ? 'selected' : ''); ?> value="0">Включити всі відомі станції в пошук</option>
+                <option <?php echo ($seconds == 60 ? 'selected' : ''); ?> value="60">Тільки станції, активні за останню годину</option>
+                <option <?php echo ($seconds == 360 ? 'selected' : ''); ?> value="360">Тільки станції, активні за останні 6 годин</option>
+                <option <?php echo ($seconds == 720 ? 'selected' : ''); ?> value="720">Тільки станції, активні за останні 12 годин</option>
             </select>
         </div>
         <div>
-            <input type="text" style="width: 280px; margin-bottom: 5px;" id="station-search-form-q" name="q" placeholder="Search here!" title="Search for a station/vehicle here!" value="<?php echo ($_GET['q'] ?? '') ?>">
-            <input type="submit" value="Search">
+            <input type="text" style="width: 280px; margin-bottom: 5px;" id="station-search-form-q" name="q" placeholder="Шукати тут!" title="Шукати станцію/транспортний засіб тут!" value="<?php echo ($_GET['q'] ?? '') ?>">
+            <input type="submit" value="Пошук">
         </div>
     </form>
 
@@ -57,10 +57,10 @@
                 <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Name/Id</th>
-                        <th>Latest heard</th>
-                        <th>Comment/Other</th>
-                        <th>Map</th>
+                        <th>Ім'я/ІД</th>
+                        <th>Почуто</th>
+                        <th>Коментар/Інше</th>
+                        <th>Карта</th>
 
                     </tr>
                 </thead>
@@ -78,8 +78,8 @@
                         </td>
                         <td>
                             <?php if ($foundStation->sourceId == 5 && $foundStation->getOgnDevice() !== null) : ?>
-                                <div style="width: 100px; display: inline-block;">Registration:</div><?php echo htmlspecialchars($foundStation->getOgnDevice()->registration); ?> <?php echo $foundStation->getOgnDevice()->cn ? '[' .htmlspecialchars($foundStation->getOgnDevice()->cn) . ']' : ''; ?><br/>
-                                <div style="width: 100px; display: inline-block;">Aircraft Model:</div><?php echo htmlspecialchars($foundStation->getOgnDevice()->aircraftModel); ?>
+                                <div style="width: 100px; display: inline-block;">Реєстрація:</div><?php echo htmlspecialchars($foundStation->getOgnDevice()->registration); ?> <?php echo $foundStation->getOgnDevice()->cn ? '[' .htmlspecialchars($foundStation->getOgnDevice()->cn) . ']' : ''; ?><br/>
+                                <div style="width: 100px; display: inline-block;">Модель літака:</div><?php echo htmlspecialchars($foundStation->getOgnDevice()->aircraftModel); ?>
                             <?php else : ?>
                                 <?php $latestPacket = PacketRepository::getInstance()->getObjectById($foundStation->latestPacketId, $foundStation->latestPacketTimestamp); ?>
                                 <?php echo htmlspecialchars($latestPacket->comment); ?>
@@ -93,7 +93,7 @@
                                         window.parent.trackdirect.filterOnStationId([]);
                                         window.parent.trackdirect.filterOnStationId([<?php echo $foundStation->id; ?>]);
                                         return false;
-                                    }">Map</a>
+                                    }">Карта</a>
                             <?php else : ?>
                                 &nbsp;
                             <?php endif; ?>
@@ -107,7 +107,7 @@
 
     <?php if (isset($_GET['q']) && count($stations) == 0) : ?>
         <p>
-            <b><i>No stations packets found.</i></b>
+            <b><i>Пакети станцій не знайдені.</i></b>
         </p>
     <?php endif; ?>
 </div>

@@ -22,49 +22,49 @@
     <title><?php echo $station->name; ?> Raw Packets</title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
-            <a class="tdlink" title="Overview" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Overview</a>
-            <a class="tdlink" title="Statistics" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Statistics</a>
-            <a class="tdlink" title="Trail Chart" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Trail Chart</a>
-            <a class="tdlink" title="Weather" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Weather</a>
-            <a class="tdlink" title="Telemetry" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Telemetry</a>
-            <span>Raw packets</span>
+            <a class="tdlink" title="Огляд" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Огляд</a>
+            <a class="tdlink" title="Статистика" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Статистика</a>
+            <a class="tdlink" title="Графік данних" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Графік данних</a>
+            <a class="tdlink" title="Погода" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Погода</a>
+            <a class="tdlink" title="Телеметрія" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Телеметрія</a>
+            <span>Сирі пакети</span>
         </div>
 
         <div class="horizontal-line">&nbsp;</div>
 
         <p>
-            This is the latest recevied packets stored in our database for station/object <?php echo $station->name; ?>. If no packets are shown the sender has not sent any packets the latest 24 hours.
+            Це останні отримані пакети, збережені в нашій базі даних для станції/об'єкта <?php echo $station->name; ?>. Якщо пакети не відображаються, це означає, що відправник не передавав жодних пакетів протягом останніх 24 годин.
         </p>
 
         <?php if ($station->sourceId == 5) : ?>
             <p>
-                We do not save raw packets for aircrafts that do not exists in the <a target="_blank" href="http://wiki.glidernet.org/ddb">OGN Devices DataBase</a>. We will only display information that can be used to identify an aircraft if the aircraft device details exists in the OGN Devices DataBase, and if the setting "I don't want this device to be identified" is deactivated.
+                Ми не зберігаємо сирі пакети для літаків, які не існують у <a target="_blank" href="http://wiki.glidernet.org/ddb">Базі даних пристроїв OGN</a>. Ми відображаємо інформацію, яка може бути використана для ідентифікації літака, тільки якщо деталі пристрою літака існують в Базі даних пристроїв OGN і налаштування "Я не хочу, щоб цей пристрій був ідентифікований" вимкнено.
             </p>
         <?php else : ?>
             <p>
-                If you compare the raw packets with similar data from other websites it may differ (especially the path), the reason is that we are not collecting packets from the same APRS-IS servers. Each APRS-IS server performes duplicate filtering, and which packet that is considered to be a duplicate may differ depending on which APRS-IS server you receive your data from.
+                Якщо ви порівнюєте сирі пакети з аналогічними даними з інших веб-сайтів, вони можуть відрізнятися (особливо, щодо шляху). Причина в тому, що ми не збираємо пакети з одних і тих самих серверів APRS-IS. Кожен сервер APRS-IS виконує фільтрацію дублікатів, і який пакет вважається дублікатом може відрізнятися в залежності від того, з якого серверу APRS-IS ви отримуєте свої дані.
             </p>
         <?php endif; ?>
 
         <div class="form-container">
             <?php if ($station->stationTypeId == 1) : ?>
                 <select id="raw-category" style="float:left; margin-right: 5px;">
-                    <option <?php echo (($_GET['category'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Packets regarding <?php echo $station->name; ?></option>
-                    <option <?php echo (($_GET['category'] ?? 1) == 2 ? 'selected' : ''); ?> value="2">Packets sent by <?php echo $station->name; ?></option>
+                    <option <?php echo (($_GET['category'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Пакети, що стосуються <?php echo $station->name; ?></option>
+                    <option <?php echo (($_GET['category'] ?? 1) == 2 ? 'selected' : ''); ?> value="2">Пакети, відправлені <?php echo $station->name; ?></option>
                 </select>
             <?php endif; ?>
 
             <select id="raw-type" style="float:left; margin-right: 5px;">
-                <option <?php echo (($_GET['type'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Raw Packets</option>
-                <option <?php echo (($_GET['type'] ?? 1) == 2 ? 'selected' : ''); ?> value="2">Decoded Data</option>
+                <option <?php echo (($_GET['type'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Сирі пакети</option>
+                <option <?php echo (($_GET['type'] ?? 1) == 2 ? 'selected' : ''); ?> value="2">Розкодовані дані</option>
             </select>
 
             <select id="raw-rows" style="float:left; margin-right: 5px;" class="pagination-rows">
-                <option <?php echo ($rows == 25 ? 'selected' : ''); ?> value="25">25 rows</option>
-                <option <?php echo ($rows == 50 ? 'selected' : ''); ?> value="50">50 rows</option>
-                <option <?php echo ($rows == 100 ? 'selected' : ''); ?> value="100">100 rows</option>
-                <option <?php echo ($rows == 200 ? 'selected' : ''); ?> value="200">200 rows</option>
-                <option <?php echo ($rows == 300 ? 'selected' : ''); ?> value="300">300 rows</option>
+                <option <?php echo ($rows == 25 ? 'selected' : ''); ?> value="25">25 рядків</option>
+                <option <?php echo ($rows == 50 ? 'selected' : ''); ?> value="50">50 рядків</option>
+                <option <?php echo ($rows == 100 ? 'selected' : ''); ?> value="100">100 рядків</option>
+                <option <?php echo ($rows == 200 ? 'selected' : ''); ?> value="200">200 рядків</option>
+                <option <?php echo ($rows == 300 ? 'selected' : ''); ?> value="300">300 рядків</option>
             </select>
         </div>
 
@@ -93,9 +93,9 @@
                             <?php echo str_replace_first(htmlspecialchars($station->name . '>'), '<b>' . htmlspecialchars($station->name) . '</b>&gt;', htmlspecialchars($packet->raw)); ?>
 
                             <?php if ($packet->mapId == 3) : ?>
-                            &nbsp;<b>[Duplicate]</b>
+                            &nbsp;<b>[Дублікат]</b>
                             <?php elseif ($packet->mapId == 6) : ?>
-                            &nbsp;<b>[Received in wrong order]</b>
+                            &nbsp;<b>[Отримано в неправильному порядку]</b>
                             <?php endif; ?>
 
                         </span>
@@ -115,9 +115,9 @@
                                                 <span class="raw-packet-timestamp"><?php echo $packet->timestamp; ?></span>
 
                                                 <?php if ($packet->mapId == 3) : ?>
-                                                &nbsp;<b>[Duplicate]</b>
+                                                &nbsp;<b>[Дублікат]</b>
                                                 <?php elseif ($packet->mapId == 6) : ?>
-                                                &nbsp;<b>[Received in wrong order]</b>
+                                                &nbsp;<b>[Отримано в неправильному порядку]</b>
                                                 <?php endif; ?>
                                             </span>
                                         </th>
@@ -131,73 +131,73 @@
                                         </td>
                                     </tr>
 
-                                    <tr><td>Packet type</td><td><?php echo $packet->getPacketTypeName(); ?></td></tr>
+                                    <tr><td>Тип пакету</td><td><?php echo $packet->getPacketTypeName(); ?></td></tr>
 
                                     <?php if ($packet->getStationObject()->stationTypeId == 2) : ?>
-                                        <tr><td>Object/Item name</td><td><?php echo htmlspecialchars($packet->getStationObject()->name); ?></td></tr>
+                                        <tr><td>Назва об'єкта</td><td><?php echo htmlspecialchars($packet->getStationObject()->name); ?></td></tr>
                                     <?php else : ?>
-                                        <tr><td>Callsign</td><td><?php echo htmlspecialchars($packet->getStationObject()->name); ?></td></tr>
+                                        <tr><td>Кличний</td><td><?php echo htmlspecialchars($packet->getStationObject()->name); ?></td></tr>
                                     <?php endif; ?>
 
                                     <?php if ($packet->getStationObject()->name != $packet->getSenderObject()->name) : ?>
-                                        <tr><td>Sender</td><td><?php echo htmlspecialchars($packet->getSenderObject()->name); ?></td></tr>
+                                        <tr><td>Відправник</td><td><?php echo htmlspecialchars($packet->getSenderObject()->name); ?></td></tr>
                                     <?php endif; ?>
 
-                                    <tr><td>Path</td><td><?php echo htmlspecialchars($packet->rawPath); ?></td></tr>
+                                    <tr><td>Шлях</td><td><?php echo htmlspecialchars($packet->rawPath); ?></td></tr>
 
                                     <?php if ($packet->reportedTimestamp != null) : ?>
-                                        <tr><td>Reported time</td><td><?php echo $packet->reportedTimestamp; ?> - <span class="raw-packet-timestamp"><?php echo $packet->reportedTimestamp; ?></span></td></tr>
+                                        <tr><td>Час повідомлення</td><td><?php echo $packet->reportedTimestamp; ?> - <span class="raw-packet-timestamp"><?php echo $packet->reportedTimestamp; ?></span></td></tr>
                                     <?php endif; ?>
 
                                     <?php if ($packet->latitude != null && $packet->longitude != null) : ?>
-                                        <tr><td>Latitude</td><td><?php echo round($packet->latitude, 5); ?></td></tr>
-                                        <tr><td>Longitude</td><td><?php echo round($packet->longitude, 5); ?></td></tr>
+                                        <tr><td>Широта</td><td><?php echo round($packet->latitude, 5); ?></td></tr>
+                                        <tr><td>Довгота</td><td><?php echo round($packet->longitude, 5); ?></td></tr>
                                     <?php endif; ?>
 
                                     <?php if ($packet->symbol != null && $packet->symbolTable != null) : ?>
-                                        <tr><td>Symbol</td><td><?php echo htmlspecialchars($packet->symbol); ?></td></tr>
-                                        <tr><td>Symbol table</td><td><?php echo htmlspecialchars($packet->symbolTable); ?></td></tr>
+                                        <tr><td>Символ</td><td><?php echo htmlspecialchars($packet->symbol); ?></td></tr>
+                                        <tr><td>Таблиця символів</td><td><?php echo htmlspecialchars($packet->symbolTable); ?></td></tr>
                                     <?php endif; ?>
 
                                     <?php if ($packet->speed != null) : ?>
                                         <?php if (isImperialUnitUser()) : ?>
-                                            <tr><td>Speed</td><td><?php echo convertKilometerToMile($packet->speed); ?> mph</td></tr>
+                                            <tr><td>Швидкість</td><td><?php echo convertKilometerToMile($packet->speed); ?> mph</td></tr>
                                         <?php else : ?>
-                                            <tr><td>Speed</td><td><?php echo $packet->speed; ?> km/h</td></tr>
+                                            <tr><td>Швидкість</td><td><?php echo $packet->speed; ?> км/г</td></tr>
                                         <?php endif; ?>
                                     <?php endif; ?>
 
                                     <?php if ($packet->course != null) : ?>
-                                        <tr><td>Course</td><td><?php echo $packet->course; ?>°</td></tr>
+                                        <tr><td>Курс</td><td><?php echo $packet->course; ?>°</td></tr>
                                     <?php endif; ?>
 
                                     <?php if ($packet->altitude != null) : ?>
                                         <?php if (isImperialUnitUser()) : ?>
-                                            <tr><td>Altitude</td><td><?php echo convertMeterToFeet($packet->altitude); ?> ft</td></tr>
+                                            <tr><td>Висота</td><td><?php echo convertMeterToFeet($packet->altitude); ?> ft</td></tr>
                                         <?php else : ?>
-                                            <tr><td>Altitude</td><td><?php echo $packet->altitude; ?> m</td></tr>
+                                            <tr><td>Висота</td><td><?php echo $packet->altitude; ?> м</td></tr>
                                         <?php endif; ?>
                                     <?php endif; ?>
 
                                     <?php if ($packet->comment != null) : ?>
                                         <?php if ($packet->packetTypeId == 10) : ?>
-                                            <tr><td>Status</td><td><?php echo htmlspecialchars($packet->comment); ?></td></tr>
+                                            <tr><td>Статус</td><td><?php echo htmlspecialchars($packet->comment); ?></td></tr>
                                         <?php elseif ($packet->packetTypeId == 7) : ?>
-                                            <tr><td>Beacon</td><td><?php echo htmlspecialchars($packet->comment); ?></td></tr>
+                                            <tr><td>Маяк</td><td><?php echo htmlspecialchars($packet->comment); ?></td></tr>
                                         <?php else : ?>
-                                            <tr><td>Comment</td><td><?php echo htmlspecialchars($packet->comment); ?></td></tr>
+                                            <tr><td>Коментар</td><td><?php echo htmlspecialchars($packet->comment); ?></td></tr>
                                         <?php endif; ?>
                                     <?php endif; ?>
 
                                     <?php if ($packet->posambiguity == 1) : ?>
-                                        <tr><td>Posambiguity</td><td>Yes</td></tr>
+                                        <tr><td>Позамбігвітність</td><td>Так</td></tr>
                                     <?php endif; ?>
 
                                     <?php if ($packet->phg != null) : ?>
                                         <?php if (isImperialUnitUser()) : ?>
-                                            <tr><td>PHG</td><td><?php echo $packet->phg; ?> (Calculated range: <?php echo round(convertKilometerToMile($packet->getPHGRange()/1000),2); ?> miles)</td></tr>
+                                            <tr><td>PHG</td><td><?php echo $packet->phg; ?> (Розрахована відстань: <?php echo round(convertKilometerToMile($packet->getPHGRange()/1000),2); ?> миль)</td></tr>
                                         <?php else : ?>
-                                            <tr><td>PHG</td><td><?php echo $packet->phg; ?> (Calculated range: <?php echo round($packet->getPHGRange()/1000,2); ?> km)</td></tr>
+                                            <tr><td>PHG</td><td><?php echo $packet->phg; ?> (Розрахована відстань: <?php echo round($packet->getPHGRange()/1000,2); ?> км)</td></tr>
                                         <?php endif; ?>
                                     <?php endif; ?>
 
@@ -209,19 +209,19 @@
                                         <?php $weather = $packet->getPacketWeather(); ?>
                                         <?php if ($weather->isExistingObject()) : ?>
                                             <tr>
-                                                <td>Weather</td>
+                                                <td>Погода</td>
                                                 <td>
                                                     <table>
                                                         <tbody>
                                                             <?php if ($weather->wxRawTimestamp !== null) : ?>
                                                                 <tr>
-                                                                    <td>Time:</td><td><span class="raw-packet-timestamp"><?php echo $weather->wxRawTimestamp; ?></span></td>
+                                                                    <td>Час:</td><td><span class="raw-packet-timestamp"><?php echo $weather->wxRawTimestamp; ?></span></td>
                                                                 </tr>
                                                             <?php endif; ?>
 
                                                             <?php if ($weather->temperature !== null) : ?>
                                                                 <tr>
-                                                                    <td>Temperature:</td>
+                                                                    <td>Температура:</td>
                                                                     <?php if (isImperialUnitUser()) : ?>
                                                                         <td><?php echo round(convertCelciusToFahrenheit($weather->temperature), 2); ?>&deg; F</td>
                                                                     <?php else : ?>
@@ -232,14 +232,14 @@
 
                                                             <?php if ($weather->humidity !== null) : ?>
                                                                 <tr>
-                                                                    <td>Humidity:</td>
+                                                                    <td>Вологість:</td>
                                                                     <td><?php echo $weather->humidity; ?>%</td>
                                                                 </tr>
                                                             <?php endif; ?>
 
                                                             <?php if ($weather->pressure !== null) : ?>
                                                                 <tr>
-                                                                    <td>Pressure:</td>
+                                                                    <td>Тиск:</td>
                                                                     <?php if (isImperialUnitUser()) : ?>
                                                                         <td><?php echo round(convertMbarToMmhg($weather->pressure),1); ?> mmHg</td>
                                                                     <?php else : ?>
@@ -250,33 +250,33 @@
 
                                                             <?php if ($weather->rain_1h !== null) : ?>
                                                                 <tr>
-                                                                    <td>Rain latest hour:</td>
+                                                                    <td>Опади за час:</td>
                                                                     <?php if (isImperialUnitUser()) : ?>
                                                                         <td><?php echo round(convertMmToInch($weather->rain_1h),2); ?> in</td>
                                                                     <?php else : ?>
-                                                                        <td><?php echo round($weather->rain_1h,2); ?> mm</td>
+                                                                        <td><?php echo round($weather->rain_1h,2); ?> мм</td>
                                                                     <?php endif; ?>
                                                                 </tr>
                                                             <?php endif; ?>
 
                                                             <?php if ($weather->rain_24h !== null) : ?>
                                                                 <tr>
-                                                                    <td>Rain latest 24h hours:</td>
+                                                                    <td>Опади за 24 години:</td>
                                                                     <?php if (isImperialUnitUser()) : ?>
                                                                         <td><?php echo round(convertMmToInch($weather->rain_24h),2); ?> in</td>
                                                                     <?php else : ?>
-                                                                        <td><?php echo round($weather->rain_24h,2); ?> mm</td>
+                                                                        <td><?php echo round($weather->rain_24h,2); ?> мм</td>
                                                                     <?php endif; ?>
                                                                 </tr>
                                                             <?php endif; ?>
 
                                                             <?php if ($weather->rain_since_midnight !== null) : ?>
                                                                 <tr>
-                                                                    <td>Rain since midnight:</td>
+                                                                    <td>Опади з початку доби:</td>
                                                                     <?php if (isImperialUnitUser()) : ?>
                                                                         <td><?php echo round(convertMmToInch($weather->rain_since_midnight),2); ?> in</td>
                                                                     <?php else : ?>
-                                                                        <td><?php echo round($weather->rain_since_midnight,2); ?> mm</td>
+                                                                        <td><?php echo round($weather->rain_since_midnight,2); ?> мм</td>
                                                                     <?php endif; ?>
                                                                 </tr>
                                                             <?php endif; ?>
@@ -284,12 +284,12 @@
                                                             <?php if (isImperialUnitUser()) : ?>
                                                                 <?php if ($weather->wind_speed !== null && $weather->wind_speed > 0) : ?>
                                                                     <tr>
-                                                                        <td>Wind Speed:</td>
+                                                                        <td>Швидкість вітру:</td>
                                                                         <td><?php echo round(convertMpsToMph($weather->wind_speed), 2); ?> mph, <?php echo $weather->wind_direction; ?>&deg;</td>
                                                                     </tr>
                                                                 <?php elseif($weather->wind_speed !== null) : ?>
                                                                     <tr>
-                                                                        <td>Wind Speed:</td>
+                                                                        <td>Швидкість вітру:</td>
                                                                         <td><?php echo round(convertMpsToMph($weather->wind_speed), 2); ?> mph</td>
                                                                     </tr>
                                                                 <?php endif; ?>
@@ -297,29 +297,29 @@
                                                             <?php else : ?>
                                                                 <?php if ($weather->wind_speed !== null && $weather->wind_speed > 0) : ?>
                                                                     <tr>
-                                                                        <td>Wind Speed:</td>
-                                                                        <td><?php echo round($weather->wind_speed, 2); ?> m/s, <?php echo $weather->wind_direction; ?>&deg;</td>
+                                                                        <td>Швидкість вітру:</td>
+                                                                        <td><?php echo round($weather->wind_speed, 2); ?> м/с, <?php echo $weather->wind_direction; ?>&deg;</td>
                                                                     </tr>
                                                                 <?php elseif($weather->wind_speed !== null) : ?>
                                                                     <tr>
-                                                                        <td>Wind Speed:</td>
-                                                                        <td><?php echo round($weather->wind_speed, 2); ?> m/s</td>
+                                                                        <td>Швидкість вітру:</td>
+                                                                        <td><?php echo round($weather->wind_speed, 2); ?> м/с</td>
                                                                     </tr>
                                                                 <?php endif; ?>
                                                             <?php endif; ?>
 
                                                             <?php if ($weather->luminosity !== null) : ?>
                                                                 <tr>
-                                                                    <td>Luminosity:</td><td><?php echo round($weather->luminosity,0); ?> W/m&sup2;</td>
+                                                                    <td>Яскравість:</td><td><?php echo round($weather->luminosity,0); ?> В/м&sup2;</td>
                                                                 </tr>
                                                             <?php endif; ?>
 
                                                             <?php if ($weather->snow !== null) : ?>
                                                                 <tr>
                                                                 <?php if (isImperialUnitUser()) : ?>
-                                                                    <td>Snow:</td><td><?php echo round(convertMmToInch($weather->snow), 0); ?> in</td>
+                                                                    <td>Сніг:</td><td><?php echo round(convertMmToInch($weather->snow), 0); ?> in</td>
                                                                 <?php else : ?>
-                                                                    <td>Snow:</td><td><?php echo round($weather->snow, 0); ?> mm</td>
+                                                                    <td>Сніг:</td><td><?php echo round($weather->snow, 0); ?> мм</td>
                                                                 <?php endif; ?>
                                                                 </tr>
                                                             <?php endif; ?>
@@ -335,7 +335,7 @@
                                         <?php $telemetry = $packet->getPacketTelemetry(); ?>
                                         <?php if ($telemetry->isExistingObject()) : ?>
                                             <tr>
-                                                <td>Telemetry Analog Values</td>
+                                                <td>Аналогові значення телеметрії</td>
                                                 <td>
                                                     <table>
                                                         <tbody>
@@ -353,7 +353,7 @@
                                             </tr>
                                             <?php if ($telemetry->bits !== null) : ?>
                                                 <tr>
-                                                    <td>Telemetry Bit Values</td>
+                                                    <td>Бітові значення телеметрії</td>
                                                     <td>
                                                         <table>
                                                             <tbody>
@@ -374,7 +374,7 @@
                                         <?php if ($packet->packetTypeId == 7 && strstr($packet->raw, ':UNIT.')) : ?>
                                             <?php $pos = strpos($packet->raw, ':UNIT.'); ?>
                                             <tr>
-                                                <td>Telemetry UNIT</td>
+                                                <td>Телеметрія UNIT</td>
                                                 <td>
                                                     <?php echo htmlspecialchars(substr($packet->raw, $pos + 6)); ?>
                                                 </td>
@@ -384,7 +384,7 @@
                                         <?php if ($packet->packetTypeId == 7 && strstr($packet->raw, ':BITS.')) : ?>
                                             <?php $pos = strpos($packet->raw, ':BITS.'); ?>
                                             <tr>
-                                                <td>Telemetry BITS</td>
+                                                <td>Телеметрія BITS</td>
                                                 <td>
                                                     <?php echo htmlspecialchars(substr($packet->raw, $pos + 6)); ?>
                                                 </td>
@@ -394,7 +394,7 @@
                                         <?php if ($packet->packetTypeId == 7 && strstr($packet->raw, ':EQNS.')) : ?>
                                             <?php $pos = strpos($packet->raw, ':EQNS.'); ?>
                                             <tr>
-                                                <td>Telemetry EQNS</td>
+                                                <td>Телеметрія EQNS</td>
                                                 <td>
                                                     <?php echo htmlspecialchars(substr($packet->raw, $pos + 6)); ?>
                                                 </td>
@@ -404,7 +404,7 @@
                                         <?php if ($packet->packetTypeId == 7 && strstr($packet->raw, ':PARM.')) : ?>
                                             <?php $pos = strpos($packet->raw, ':PARM.'); ?>
                                             <tr>
-                                                <td>Telemetry PARM</td>
+                                                <td>Телеметрія PARM</td>
                                                 <td>
                                                     <?php echo htmlspecialchars(substr($packet->raw, $pos + 6)); ?>
                                                 </td>
@@ -415,7 +415,7 @@
                                     <?php if ($packet->getPacketOgn()->isExistingObject()) : ?>
                                         <?php if ($packet->getPacketOgn()->ognSignalToNoiseRatio !== null) : ?>
                                             <tr>
-                                                <td>Signal to Noise Ratio</td>
+                                                <td>Співвідношення сигнал-шум</td>
                                                 <td>
                                                     <?php echo $packet->getPacketOgn()->ognSignalToNoiseRatio; ?> dB
                                                 </td>
@@ -424,7 +424,7 @@
 
                                         <?php if ($packet->getPacketOgn()->ognBitErrorsCorrected !== null) : ?>
                                             <tr>
-                                                <td>Bits corrected</td>
+                                                <td>Виправлені біти</td>
                                                 <td>
                                                     <?php echo $packet->getPacketOgn()->ognBitErrorsCorrected; ?>
                                                 </td>
@@ -433,7 +433,7 @@
 
                                         <?php if ($packet->getPacketOgn()->ognFrequencyOffset !== null) : ?>
                                             <tr>
-                                                <td>Frequency Offset</td>
+                                                <td>Зсув частоти</td>
                                                 <td>
                                                     <?php echo $packet->getPacketOgn()->ognFrequencyOffset; ?> kHz
                                                 </td>
@@ -442,7 +442,7 @@
 
                                         <?php if ($packet->getPacketOgn()->ognClimbRate !== null) : ?>
                                             <tr>
-                                                <td>Climb Rate</td>
+                                                <td>Швидкість підйому</td>
                                                 <td>
                                                     <?php echo $packet->getPacketOgn()->ognClimbRate; ?> fpm
                                                 </td>
@@ -451,7 +451,7 @@
 
                                         <?php if ($packet->getPacketOgn()->ognTurnRate !== null) : ?>
                                             <tr>
-                                                <td>Turn Rate</td>
+                                                <td>Швидкість повороту</td>
                                                 <td>
                                                     <?php echo $packet->getPacketOgn()->ognTurnRate; ?> fpm
                                                 </td>
@@ -468,7 +468,7 @@
 
         <?php if (count($packets) == 0) : ?>
         <p>
-            <b><i>No raw packets found.</i></b>
+            <b><i>Сирі пакети не знайдено.</i></b>
         </p>
         <?php endif; ?>
     </div>

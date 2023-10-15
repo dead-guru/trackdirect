@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
   git \
@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
   imagemagick \
   inkscape \
   && rm -rf /var/lib/apt/lists/*
+
+#COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 RUN pecl install imagick && docker-php-ext-enable imagick && docker-php-ext-install pdo pdo_pgsql && docker-php-ext-install gd && docker-php-ext-enable gd
 

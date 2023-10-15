@@ -35,10 +35,10 @@
                 <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Name/Id</th>
-                        <th>Latest heard</th>
-                        <th>Comment/Other</th>
-                        <th>Map</th>
+                        <th>Ім'я/ІД</th>
+                        <th>Почуто</th>
+                        <th>Коментар/Інше</th>
+                        <th>Карта</th>
 
                     </tr>
                 </thead>
@@ -46,7 +46,7 @@
                 <?php foreach ($stations as $foundStation) : ?>
                     <tr>
                         <td>
-                            <img src="<?php echo $foundStation->getIconFilePath(22, 22); ?>" alt="Symbol"/>
+                            <img src="<?php echo $foundStation->getIconFilePath(22, 22); ?>" alt="Символ"/>
                         </td>
                         <td>
                             <a class="tdlink" href="/views/overview.php?id=<?php echo $foundStation->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>"><?php echo htmlentities($foundStation->name) ?></a>
@@ -85,7 +85,7 @@
 
     <?php if (count($stations) == 0) : ?>
         <p>
-            <b><i>No station have been heard in the last 24 hours.</i></b>
+            <b><i>За останні 24 години жодну станцію не було почуто.</i></b>
         </p>
     <?php endif; ?>
 </div>

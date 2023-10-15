@@ -19,33 +19,33 @@
     <title><?php echo $station->name; ?> Telemetry</title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
-            <a class="tdlink" title="Overview" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Overview</a>
-            <a class="tdlink" title="Statistics" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Statistics</a>
-            <a class="tdlink" title="Trail Chart" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Trail Chart</a>
-            <a class="tdlink" title="Weather" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Weather</a>
-            <span>Telemetry</span>
-            <a class="tdlink" title="Raw packets" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Raw packets</a>
+            <a class="tdlink" title="Огляд" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Огляд</a>
+            <a class="tdlink" title="Статистика" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Статистика</a>
+            <a class="tdlink" title="Графік данних" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Графік данних</a>
+            <a class="tdlink" title="Погода" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Погода</a>
+            <span>Телеметрія</span>
+            <a class="tdlink" title="Сирі пакети" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Сирі пакети</a>
         </div>
 
         <div class="horizontal-line">&nbsp;</div>
 
         <?php if (count($telemetryPackets) > 0) : ?>
 
-            <p>This is the latest recevied telemetry packets stored in our database for station/object <?php echo $station->name; ?>. If no packets are shown the sender has not sent any telemetry packets the latest <?php echo $maxDays; ?> day(s).</p>
-            <p>Telemetry packets is used to share measurements like repeteater parameters, battery voltage, radiation readings (or any other measurements).</p>
+            <p>Це останні пакети телеметрії, отримані і збережені в нашій базі даних для станції/об'єкта <?php echo $station->name; ?>. Якщо не відображаються жодні пакети, це означає, що відправник не надсилає жодних пакетів телеметрії протягом останніх <?php echo $maxDays; ?> днів.</p>
+            <p>Пакети телеметрії використовуються для передачі вимірювань, таких як параметри репітера, напруга батареї, вимірювання радіації (або будь-які інші вимірювання).</p>
 
             <div class="form-container">
                 <select id="telemetry-category" style="float:left; margin-right: 5px;">
-                    <option <?php echo (($_GET['category'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Telemetry Values</option>
-                    <option <?php echo (($_GET['category'] ?? 1) == 2 ? 'selected' : ''); ?> value="2">Telemetry Bits</option>
+                    <option <?php echo (($_GET['category'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Значення телеметрії</option>
+                    <option <?php echo (($_GET['category'] ?? 1) == 2 ? 'selected' : ''); ?> value="2">Біти телеметрії</option>
                 </select>
 
                 <select id="telemetry-rows" style="float:left; margin-right: 5px;" class="pagination-rows">
-                    <option <?php echo ($rows == 25 ? 'selected' : ''); ?> value="25">25 rows</option>
-                    <option <?php echo ($rows == 50 ? 'selected' : ''); ?> value="50">50 rows</option>
-                    <option <?php echo ($rows == 100 ? 'selected' : ''); ?> value="100">100 rows</option>
-                    <option <?php echo ($rows == 200 ? 'selected' : ''); ?> value="200">200 rows</option>
-                    <option <?php echo ($rows == 300 ? 'selected' : ''); ?> value="300">300 rows</option>
+                    <option <?php echo ($rows == 25 ? 'selected' : ''); ?> value="25">25 рядків</option>
+                    <option <?php echo ($rows == 50 ? 'selected' : ''); ?> value="50">50 рядків</option>
+                    <option <?php echo ($rows == 100 ? 'selected' : ''); ?> value="100">100 рядків</option>
+                    <option <?php echo ($rows == 200 ? 'selected' : ''); ?> value="200">200 рядків</option>
+                    <option <?php echo ($rows == 300 ? 'selected' : ''); ?> value="300">300 рядків</option>
                 </select>
             </div>
 
@@ -64,7 +64,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Time</th>
+                            <th>Час</th>
                             <th><?php echo htmlspecialchars($latestPacketTelemetry->getValueParameterName(1)); ?>*</th>
                             <th><?php echo htmlspecialchars($latestPacketTelemetry->getValueParameterName(2)); ?>*</th>
                             <th><?php echo htmlspecialchars($latestPacketTelemetry->getValueParameterName(3)); ?>*</th>
@@ -124,7 +124,7 @@
             <div class="telemetry-subtable">
                 <div>
                     <div>
-                        *Used Equation Coefficients:
+                        *Використані коефіцієнти рівняння:
                     </div>
                     <div>
                         <?php echo htmlspecialchars($latestPacketTelemetry->getValueParameterName(1)); ?>: <?php echo implode(', ', $latestPacketTelemetry->getEqnsValue(1)); ?>
@@ -150,7 +150,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Time</th>
+                                <th>Час</th>
                                 <th><?php echo htmlspecialchars($latestPacketTelemetry->getBitParameterName(1)); ?>*</th>
                                 <th><?php echo htmlspecialchars($latestPacketTelemetry->getBitParameterName(2)); ?>*</th>
                                 <th><?php echo htmlspecialchars($latestPacketTelemetry->getBitParameterName(3)); ?>*</th>
@@ -218,7 +218,7 @@
                 <div class="telemetry-subtable">
                     <div>
                         <div>
-                            *Used Bit Sense:
+                            *Використані бітові значення (Bit Sense):
                         </div>
                         <div>
                             <?php echo $latestPacketTelemetry->getBitSense(1); ?>
@@ -239,17 +239,17 @@
         <?php if (count($telemetryPackets) > 0) : ?>
             <br/>
             <ul>
-                <li>The parameter names for the analog channels will be Value1, Value2, Value3 (up to Value5) if station has not sent a PARAM-packet that specifies the parameter names for each analog channel.</li>
-                <li>Each analog value is a decimal number between 000 and 255 (according to APRS specifications). The receiver use the telemetry equation coefficientsto to restore the original sensor values. If no EQNS-packet with equation coefficients is sent we will show the values as is (this corresponds to the equation coefficients a=0, b=1 and c=0).<br/>The sent equation coefficients is used in the equation: a * value<sup>2</sup> + b * value + c.</li>
-                <li>The units for the analog values will not be shown if station has not sent a UNIT-packet specifying what unit's to use.</li>
-                <li>The parameter names for the digital bits will be Bit1, Bit2, Bit3 (up to Bit8) if station has not sent a PARAM-packet that specifies the parameter names for each digital bit.</li>
-                <li>All bit labels will be named "On" if station has not sent a UNIT-packet that specifies the label of each bit.</li>
-                <li>A bit is considered to be <b>On</b> when the bit is 1 if station has not sent a BITS-packet that specifies another "Bit sense" (a BITS-packet specify the state of the bits that match the BIT labels)</li>
+                <li>Назви параметрів для аналогових каналів будуть Value1, Value2, Value3 (до Value5), якщо станція не відправила пакет PARAM, який вказує назви параметрів для кожного аналогового каналу.</li>
+                <li>Кожне аналогове значення - це десяткове число від 000 до 255 (відповідно до APRS-специфікацій). Приймач використовує коефіцієнти рівняння телеметрії для відновлення початкових значень сенсора. Якщо не було відправлено пакет EQNS з коефіцієнтами рівняння, ми відображатимемо значення як є (це відповідає коефіцієнтам рівняння a=0, b=1 і c=0). Відправлені коефіцієнти рівняння використовуються в рівнянні: a * value<sup>2</sup> + b * value + c.</li>
+                <li>Одиниці вимірювання для аналогових значень не будуть відображатися, якщо станція не відправила пакет UNIT, який вказує, які одиниці вимірювання використовувати.</li>
+                <li>Назви параметрів для цифрових бітів будуть Bit1, Bit2, Bit3 (до Bit8), якщо станція не відправила пакет PARAM, який вказує назви параметрів для кожного цифрового біту.</li>
+                <li>Всі позначки бітів будуть називатися "On", якщо станція не відправила пакет UNIT, який вказує позначку кожного біту.</li>
+                <li>Біт вважається увімкненим (On), коли біт дорівнює 1, якщо станція не відправила пакет BITS, який вказує інший "Бітовий стан" (пакет BITS визначає стан бітів, які відповідають позначкам BIT).</li>
             </ul>
         <?php endif; ?>
 
         <?php if (count($telemetryPackets) == 0) : ?>
-            <p><i><b>No recent telemetry values.</b></i></p>
+            <p><i><b>Немає недавніх значень телеметрії.</b></i></p>
         <?php endif; ?>
 
     </div>

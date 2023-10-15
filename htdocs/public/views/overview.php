@@ -2,15 +2,15 @@
 
 <?php $station = StationRepository::getInstance()->getObjectById($_GET['id'] ?? null); ?>
 <?php if ($station->isExistingObject()) : ?>
-    <title><?php echo $station->name; ?> Overview</title>
+    <title><?php echo $station->name; ?> Огляд</title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
             <span>Overview</span>
-            <a class="tdlink" title="Statistics" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Statistics</a>
-            <a class="tdlink" title="Trail Chart" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Trail Chart</a>
-            <a class="tdlink" title="Weather" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Weather</a>
-            <a class="tdlink" title="Telemetry" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Telemetry</a>
-            <a class="tdlink" title="Raw packets" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Raw packets</a>
+            <a class="tdlink" title="Статистика" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Статистика</a>
+            <a class="tdlink" title="Графік данних" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Графік данних</a>
+            <a class="tdlink" title="Погода" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Погода</a>
+            <a class="tdlink" title="Телеметрія" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Телеметрія</a>
+            <a class="tdlink" title="Сирі пакети" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Сирі пакети</a>
         </div>
 
         <div class="horizontal-line">&nbsp;</div>
@@ -21,27 +21,27 @@
                     <?php if ($station->sourceId == 5) : ?>
                         ID:
                     <?php else: ?>
-                        Name:
+                        Ім'я:
                     <?php endif; ?>
                 </div>
-                <div class="overview-content-station" title="Name of the station/object">
+                <div class="overview-content-station" title="Назва станції/об'єкта">
                     <?php echo htmlentities($station->name); ?>
                 </div>
             </div>
 
             <div>
                 <div class="overview-content-summary-hr">
-                    Station ID:
+                    ID Станції:
                 </div>
-                <div class="overview-content-station" title="Website station id">
+                <div class="overview-content-station" title="Ідентифікатор станції.">
                     <?php echo $station->id; ?>
                 </div>
             </div>
 
             <?php if ($station->sourceId != null) : ?>
                 <div>
-                    <div class="overview-content-summary-hr">Source:</div>
-                    <div class="overview-content-station" title="Source of this station">
+                    <div class="overview-content-summary-hr">Джерело:</div>
+                    <div class="overview-content-station" title="Джерело цієї станції">
                         <?php echo $station->getSourceDescription(); ?>
                     </div>
                 </div>
@@ -51,8 +51,8 @@
                 <br/>
                 <?php if ($station->getOgnDevice()->registration != null) : ?>
                     <div>
-                        <div class="overview-content-summary-hr">Aircraft Registration:</div>
-                        <div class="overview-content-station" title="Aircraft Registration">
+                        <div class="overview-content-summary-hr">Реєстрація літака:</div>
+                        <div class="overview-content-station" title="Реєстрація літака">
                             <b><?php echo htmlspecialchars($station->getOgnDevice()->registration); ?></b>
                         </div>
                     </div>
@@ -92,9 +92,9 @@
                 </div>
             <?php else : ?>
                 <div>
-                    <div class="overview-content-summary-hr">Symbol:</div>
-                    <div class="overview-content-station" title="Symbol type">
-                        <img src="<?php echo $station->getIconFilePath(24, 24); ?>" alt="Latest symbol" />
+                    <div class="overview-content-summary-hr">Символ:</div>
+                    <div class="overview-content-station" title="Символ">
+                        <img src="<?php echo $station->getIconFilePath(24, 24); ?>" alt="Останнній символ" />
                         <span>&nbsp;<?php echo htmlentities($station->getLatestSymbolDescription()); ?></span>
                     </div>
                 </div>
@@ -106,18 +106,18 @@
                 <div class="overview-content-divider"></div>
 
                 <div>
-                    <div class="overview-content-summary-hr">Latest Packet:</div>
-                    <div class="overview-content-summary-cell-type overview-content-summary-indent"><?php echo $latestPacket->getPacketTypeName(); ?> Packet</div>
+                    <div class="overview-content-summary-hr">Останній пакет:</div>
+                    <div class="overview-content-summary-cell-type overview-content-summary-indent"><?php echo $latestPacket->getPacketTypeName(); ?> Пакет</div>
                 </div>
 
                 <?php $latestPacketSender = SenderRepository::getInstance()->getObjectById($latestPacket->senderId); ?>
                 <?php if ($latestPacketSender->name != $station->name) : ?>
                 <div>
-                    <div class="overview-content-summary-hr-indent">Sender:</div>
-                    <div class="overview-content-summary-indent" title="Sender of current packet">
+                    <div class="overview-content-summary-hr-indent">Відправник:</div>
+                    <div class="overview-content-summary-indent" title="Відправник поточного пакету">
                         <?php $latestPacketSenderStation = StationRepository::getInstance()->getObjectByNameAndSenderId($latestPacketSender->name, $latestPacketSender->id); ?>
                         <?php if ($latestPacketSenderStation->isExistingObject()) : ?>
-                            <a class="tdlink" title="Sender of the object" href="/views/overview.php?id=<?php echo $latestPacketSenderStation->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">
+                            <a class="tdlink" title="Відправник об'єкта" href="/views/overview.php?id=<?php echo $latestPacketSenderStation->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">
                                 <?php echo htmlentities($latestPacketSenderStation->name); ?>
                             </a>
                         <?php else : ?>
@@ -128,30 +128,30 @@
                 <?php endif; ?>
 
                 <div>
-                    <div class="overview-content-summary-hr-indent">Receive Time:</div>
-                    <div title="Timestamp of the latest packet" id="latest-timestamp" class="overview-content-summary-cell-time overview-content-summary-indent">
+                    <div class="overview-content-summary-hr-indent">Час отримання:</div>
+                    <div title="Відмітка часу останнього пакета" id="latest-timestamp" class="overview-content-summary-cell-time overview-content-summary-indent">
                         <?php echo $station->latestPacketTimestamp; ?>
                     </div>
                 </div>
 
 
                 <div>
-                    <div class="overview-content-summary-hr-indent">Age:</div>
-                    <div title="Age of the latest packet" id="latest-timestamp-age" class="overview-content-summary-cell-time overview-content-summary-indent">
+                    <div class="overview-content-summary-hr-indent">Вік:</div>
+                    <div title="Вік останнього пакета" id="latest-timestamp-age" class="overview-content-summary-cell-time overview-content-summary-indent">
                         <?php echo $station->latestPacketTimestamp; ?>
                     </div>
                 </div>
 
 
                 <div>
-                    <div class="overview-content-summary-hr-indent">Path:</div>
-                    <div class="overview-content-summary-cell-path overview-content-summary-indent" title="Latest path"><?php echo $latestPacket->rawPath; ?></div>
+                    <div class="overview-content-summary-hr-indent">Шлях:</div>
+                    <div class="overview-content-summary-cell-path overview-content-summary-indent" title="Останній шлях"><?php echo $latestPacket->rawPath; ?></div>
                 </div>
 
                 <?php if ($latestPacket->comment != '') : ?>
                     <div>
-                        <div class="overview-content-summary-hr-indent">Comment:</div>
-                        <div title="Comment found in thelatest packet" id="latest-packet-comment" class="overview-content-summary-indent">
+                        <div class="overview-content-summary-hr-indent">Коментар:</div>
+                        <div title="Коментар, знайдений в останньому пакеті" id="latest-packet-comment" class="overview-content-summary-indent">
                             <?php echo htmlentities($latestPacket->comment); ?>
                         </div>
                     </div>
@@ -161,22 +161,22 @@
                     <div style="line-height: 8px">&nbsp;</div>
                     <?php if ($latestPacket->getPacketOgn()->ognSignalToNoiseRatio !== null) : ?>
                         <div>
-                            <div class="overview-content-summary-hr-indent">Signal to Noise Ratio:</div>
-                            <div class="overview-content-summary-indent" title="Signal to Noise Ratio measured upon reception"><?php echo $latestPacket->getPacketOgn()->ognSignalToNoiseRatio; ?> dB</div>
+                            <div class="overview-content-summary-hr-indent">Відношення сигнал-шум:</div>
+                            <div class="overview-content-summary-indent" title="Виміряне відношення сигналу до шуму при прийомі."><?php echo $latestPacket->getPacketOgn()->ognSignalToNoiseRatio; ?> дБ</div>
                         </div>
                     <?php endif;?>
 
                     <?php if ($latestPacket->getPacketOgn()->ognBitErrorsCorrected !== null) : ?>
                         <div>
-                            <div class="overview-content-summary-hr-indent">Bits corrected:</div>
-                            <div class="overview-content-summary-indent" title="The number of bit errors corrected in the packet upon reception"><?php echo $latestPacket->getPacketOgn()->ognBitErrorsCorrected; ?></div>
+                            <div class="overview-content-summary-hr-indent">Виправлені біти:</div>
+                            <div class="overview-content-summary-indent" title="Кількість виправлених помилкових бітів у пакеті під час прийому."><?php echo $latestPacket->getPacketOgn()->ognBitErrorsCorrected; ?></div>
                         </div>
                     <?php endif;?>
 
                     <?php if ($latestPacket->getPacketOgn()->ognFrequencyOffset !== null) : ?>
                         <div>
-                            <div class="overview-content-summary-hr-indent">Frequency Offset:</div>
-                            <div class="overview-content-summary-indent" title="The frequency offset measured upon reception"><?php echo $latestPacket->getPacketOgn()->ognFrequencyOffset; ?> kHz</div>
+                            <div class="overview-content-summary-hr-indent">Зміщення частоти:</div>
+                            <div class="overview-content-summary-indent" title="Зміщення частоти, виміряне при прийманні"><?php echo $latestPacket->getPacketOgn()->ognFrequencyOffset; ?> kHz</div>
                         </div>
                     <?php endif;?>
                 <?php endif;?>
@@ -189,16 +189,16 @@
                 <div class="overview-content-divider"></div>
 
                 <div>
-                    <div class="overview-content-summary-hr">Latest Weather:</div>
-                    <div id="weather-timestamp" class="overview-content-summary-cell-weather-time" title="Latest received weather">
+                    <div class="overview-content-summary-hr">Метеопакет:</div>
+                    <div id="weather-timestamp" class="overview-content-summary-cell-weather-time" title="Остання отримана погода">
                         <?php echo $station->latestWeatherPacketTimestamp; ?>
                     </div>
                 </div>
 
                 <?php if ($station->latestWeatherPacketComment != '') : ?>
                     <div>
-                        <div class="overview-content-summary-hr-indent">Comment/Software:</div>
-                        <div class="overview-content-summary-cell-time overview-content-summary-indent" title="Weather packet comment/software">
+                        <div class="overview-content-summary-hr-indent">Коментар/ПЗ:</div>
+                        <div class="overview-content-summary-cell-time overview-content-summary-indent" title="Коментар/програмне забезпечення метеопакету.">
                             <?php echo htmlentities($station->latestWeatherPacketComment); ?><br/>
                         </div>
                     </div>
@@ -210,8 +210,8 @@
                 <div class="overview-content-divider"></div>
 
                 <div>
-                    <div class="overview-content-summary-hr">Latest Telemetry:</div>
-                    <div id="telemetry-timestamp" class="overview-content-summary-cell-telemetry-time" title="Latest received telemetry">
+                    <div class="overview-content-summary-hr">Остання телеметрія:</div>
+                    <div id="telemetry-timestamp" class="overview-content-summary-cell-telemetry-time" title="Останні отримані телеметричні дані">
                         <?php echo $station->latestTelemetryPacketTimestamp; ?>
                     </div>
                 </div>
@@ -223,17 +223,17 @@
                 <div class="overview-content-divider"></div>
 
                 <div>
-                    <div class="overview-content-summary-hr">Latest Position:</div>
-                    <div id="overview-content-latest-position" class="overview-content-summary-cell-position" title="Latest position (that is approved by our filters)">
+                    <div class="overview-content-summary-hr">Остання позиція</div>
+                    <div id="overview-content-latest-position" class="overview-content-summary-cell-position" title="Остання позиція (яка була схвалена нашими фільтрами)">
                         <?php echo round($station->latestConfirmedLatitude, 5); ?>, <?php echo round($station->latestConfirmedLongitude, 5); ?>
                     </div>
                 </div>
 
                 <div>
-                    <div class="overview-content-summary-hr-indent">Receive Time:</div>
-                    <div id="position-timestamp" class="overview-content-summary-cell-time overview-content-summary-indent" title="Latest position receive time">
+                    <div class="overview-content-summary-hr-indent">Час прийому:</div>
+                    <div id="position-timestamp" class="overview-content-summary-cell-time overview-content-summary-indent" title="Час отримання останньої позиції">
                         <?php if ($station->latestPacketId == $station->latestConfirmedPacketId && $station->latestPacketTimestamp == $station->latestConfirmedPacketTimestamp) : ?>
-                            (Received in latest packet)
+                            (Отримано в останньому пакеті)
                         <?php else : ?>
                             <?php echo $station->latestConfirmedPacketTimestamp; ?>
                         <?php endif; ?>
@@ -248,7 +248,7 @@
                                 window.parent.trackdirect.filterOnStationId([]);
                                 window.parent.trackdirect.filterOnStationId([<?php echo $station->id; ?>]);
                                 return false;
-                            }">Show on map</a>
+                            }">Показати на мапі</a>
                     </div>
                 </div>
 
@@ -256,8 +256,8 @@
                 <?php $latestConfirmedPacket = PacketRepository::getInstance()->getObjectById($station->latestConfirmedPacketId, $station->latestConfirmedPacketTimestamp); ?>
                 <?php if ($latestConfirmedPacket->isExistingObject() && $latestConfirmedPacket->posambiguity > 0) : ?>
                 <div>
-                    <div class="overview-content-summary-hr-indent">Posambiguity:</div>
-                    <div class="overview-content-summary-cell-posambiguity overview-content-summary-indent" title="If posambiguity is active the gps position is inaccurate">Yes</div>
+                    <div class="overview-content-summary-hr-indent">Невизначеність позиції:</div>
+                    <div class="overview-content-summary-cell-posambiguity overview-content-summary-indent" title="Якщо активована невизначеність позиції, то GPS-позиція може бути неточною">Так</div>
                 </div>
                 <?php endif;?>
 
@@ -267,12 +267,12 @@
 
                             <?php if ($latestConfirmedPacket->speed != '') : ?>
                             <div>
-                                <div class="overview-content-summary-hr-indent">Speed:</div>
+                                <div class="overview-content-summary-hr-indent">Швидкість:</div>
                                 <div title="Latest speed" class="overview-content-summary-indent">
                                     <?php if (isImperialUnitUser()) : ?>
                                         <?php echo round(convertKilometerToMile($latestConfirmedPacket->speed), 2); ?> mph
                                     <?php else : ?>
-                                        <?php echo round($latestConfirmedPacket->speed, 2); ?> km/h
+                                        <?php echo round($latestConfirmedPacket->speed, 2); ?> км/г
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -280,19 +280,19 @@
 
                             <?php if ($latestConfirmedPacket->course != '') : ?>
                             <div>
-                                <div class="overview-content-summary-hr-indent">Course:</div>
+                                <div class="overview-content-summary-hr-indent">Курс:</div>
                                 <div title="Latest course" class="overview-content-summary-indent"><?php echo $latestConfirmedPacket->course; ?>&deg;</div>
                             </div>
                             <?php endif;?>
 
                             <?php if ($latestConfirmedPacket->altitude != '') : ?>
                             <div>
-                                <div class="overview-content-summary-hr-indent">Altitude:</div>
+                                <div class="overview-content-summary-hr-indent">Висота:</div>
                                 <div title="Latest altitude" class="overview-content-summary-indent">
                                     <?php if (isImperialUnitUser()) : ?>
                                         <?php echo round(convertMeterToFeet($latestConfirmedPacket->altitude), 2); ?> ft
                                     <?php else : ?>
-                                        <?php echo round($latestConfirmedPacket->altitude, 2); ?> m
+                                        <?php echo round($latestConfirmedPacket->altitude, 2); ?> м
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -304,16 +304,16 @@
                     <?php if ($latestConfirmedPacket->getPacketOgn()->isExistingObject()) : ?>
                         <?php if ($latestConfirmedPacket->getPacketOgn()->ognClimbRate !== null) : ?>
                             <div>
-                                <div class="overview-content-summary-hr-indent">Climb Rate:</div>
-                                <div class="overview-content-summary-indent" title="The climb rate in feet-per-minute"><?php echo $latestConfirmedPacket->getPacketOgn()->ognClimbRate; ?> fpm</div>
+                                <div class="overview-content-summary-hr-indent">Швидкість підйому:</div>
+                                <div class="overview-content-summary-indent" title="Швидкість підйому в футах на хвилину."><?php echo $latestConfirmedPacket->getPacketOgn()->ognClimbRate; ?> fpm</div>
                             </div>
                         <?php endif;?>
 
                         <?php if ($latestConfirmedPacket->getPacketOgn()->ognTurnRate !== null) : ?>
                             <div>
                                 <?php $turnRateNote = true; ?>
-                                <div class="overview-content-summary-hr-indent">Turn Rate:</div>
-                                <div class="overview-content-summary-indent" title="Current turn rate."><?php echo $latestConfirmedPacket->getPacketOgn()->ognTurnRate; ?> rot</div>
+                                <div class="overview-content-summary-hr-indent">Швидкість повороту:</div>
+                                <div class="overview-content-summary-indent" title="Поточна швидкість повороту."><?php echo $latestConfirmedPacket->getPacketOgn()->ognTurnRate; ?> rot</div>
                             </div>
                         <?php endif;?>
                     <?php endif;?>
@@ -358,10 +358,10 @@
             <?php if ($stationLatestSymbols !== null && count($stationLatestSymbols) > 1) : ?>
                 <div class="overview-content-divider"></div>
                 <div>
-                    <div class="overview-content-summary-hr">Latest used symbols:</div>
-                    <div title="Latest symbols that this station has used">
+                    <div class="overview-content-summary-hr">Останні використані символи:</div>
+                    <div title="Останні символи, які використовувала ця станція">
                         <?php foreach ($stationLatestSymbols as $symbolPath) : ?>
-                            <img src="<?php echo $symbolPath; ?>" alt="Symbol"/>&nbsp;
+                            <img src="<?php echo $symbolPath; ?>" alt="Символ"/>&nbsp;
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -374,8 +374,8 @@
             <?php if ($stationPacketFrequency != null) : ?>
                 <div class="overview-content-divider"></div>
                 <div>
-                    <div class="overview-content-summary-hr">Packet frequency:</div>
-                    <div class="overview-content-packet-frequency" title="Calculated packet frequency"><span><?php echo $stationPacketFrequency; ?>s</span> <span>(Latest <?php echo $packetFrequencyNumberOfPackets; ?> packets)</span></div>
+                    <div class="overview-content-summary-hr">Частота пакетів:</div>
+                    <div class="overview-content-packet-frequency" title="Розрахована частота пакетів"><span><?php echo $stationPacketFrequency; ?></span> <span>(Останні <?php echo $packetFrequencyNumberOfPackets; ?> пакетів)</span></div>
                 </div>
             <?php endif; ?>
 
@@ -384,23 +384,23 @@
         </div>
 
         <div class="overview-content-symbol" id ="overview-content-symbol-<?php echo $station->id; ?>">
-            <img src="<?php echo $station->getIconFilePath(150, 150); ?>" alt="Latest symbol" title="<?php echo $station->getLatestSymbolDescription(); ?>"/>
+            <img src="<?php echo $station->getIconFilePath(150, 150); ?>" alt="Останній символ" title="<?php echo $station->getLatestSymbolDescription(); ?>"/>
             <?php if ($station->latestPacketId !== null) : ?>
                 <br/>
                 <div style="text-align: center; padding-top: 30px;">
                     <?php if ($station->getOgnDevice() !== null && $station->getOgnDevice()->registration != null) : ?>
                         <div>
-                            Search for <a href="https://www.jetphotos.com/registration/<?php echo $station->getOgnDevice()->registration; ?>" target="_blank"><?php echo htmlspecialchars($station->getOgnDevice()->registration); ?></a> photos!
+                            Пошук фотографій <a href="https://www.jetphotos.com/registration/<?php echo $station->getOgnDevice()->registration; ?>" target="_blank"><?php echo htmlspecialchars($station->getOgnDevice()->registration); ?></a>!
                         </div>
                     <?php endif; ?>
 
                     <?php if ($station->sourceId == 1) : ?>
                         <?php if ($station->getLiklyHamRadioCallsign() !== null) : ?>
-                            <div>Search for <a href="https://www.qrz.com/db/<?php echo $station->getLiklyHamRadioCallsign(); ?>" target="_blank"><?php echo htmlspecialchars($station->getLiklyHamRadioCallsign()); ?></a> at QRZ</div>
+                            <div>Знайти <a href="https://www.qrz.com/db/<?php echo $station->getLiklyHamRadioCallsign(); ?>" target="_blank"><?php echo htmlspecialchars($station->getLiklyHamRadioCallsign()); ?></a> на QRZ</div>
                         <?php endif; ?>
                     <?php endif; ?>
 
-                    <div>Export <a href="/data/kml.php?id=<?php echo $station->id; ?>"><?php echo htmlspecialchars($station->name); ?></a> data to KML</div>
+                    <div>Export <a href="/data/kml.php?id=<?php echo $station->id; ?>"><?php echo htmlspecialchars($station->name); ?></a> данні в KML</div>
                 </div>
                 <div style="clear: both;"></div>
             <?php endif; ?>
@@ -415,11 +415,11 @@
             <?php if (count($relatedStations) > 1) : ?>
                 <div>
                     <?php $relatedStattionNote = true; ?>
-                    <div class="overview-content-summary-hr">Related stations/objects:</div>
-                    <div class="overview-content-station-list" title="Stations with same call except SSID or objects with related sender">
+                    <div class="overview-content-summary-hr">Пов'язані станції/об'єкти.:</div>
+                    <div class="overview-content-station-list" title="Станції зі схожим викликним знаком, окрім SSID, або об'єкти від пов'язаного відправника">
                         <?php foreach ($relatedStations as $relatedStation) : ?>
                             <?php if ($relatedStation->id != $station->id) : ?>
-                                <img src="<?php echo $relatedStation->getIconFilePath(22, 22); ?>" alt="Symbol"/>&nbsp;
+                                <img src="<?php echo $relatedStation->getIconFilePath(22, 22); ?>" alt="Символ"/>&nbsp;
                                 <span><a class="tdlink" href="/views/overview.php?id=<?php echo $relatedStation->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>"><?php echo htmlentities($relatedStation->name) ?></a></span>
                                 <br/>
                             <?php endif; ?>
@@ -434,12 +434,12 @@
             <?php $closeByStations = StationRepository::getInstance()->getCloseByObjectListByStationId($station->id, 15); ?>
             <?php if (count($closeByStations) > 1) : ?>
                 <div>
-                    <div class="overview-content-summary-hr">Nearby stations/objects:</div>
-                    <div class="overview-content-station-list" title="The closest stations/objects at the current position">
+                    <div class="overview-content-summary-hr">Поблизу розташовані станції/об'єкти:</div>
+                    <div class="overview-content-station-list" title="Найближчі станції/об'єкти на поточній позиції">
                         <?php foreach ($closeByStations as $closeByStation) : ?>
                             <?php if ($closeByStation->id != $station->id) : ?>
 
-                                <img src="<?php echo $closeByStation->getIconFilePath(22, 22); ?>" alt="Symbol"/>&nbsp;
+                                <img src="<?php echo $closeByStation->getIconFilePath(22, 22); ?>" alt="Символ"/>&nbsp;
                                 <span>
                                     <a class="tdlink" href="/views/overview.php?id=<?php echo $closeByStation->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>"><?php echo htmlentities($closeByStation->name) ?></a>
                                     <span>
@@ -451,9 +451,9 @@
                                             <?php endif; ?>
                                         <?php else : ?>
                                             <?php if ($closeByStation->getDistance($station->latestConfirmedLatitude, $station->latestConfirmedLongitude) < 1000) : ?>
-                                                <?php echo round($closeByStation->getDistance($station->latestConfirmedLatitude, $station->latestConfirmedLongitude), 0); ?> m
+                                                <?php echo round($closeByStation->getDistance($station->latestConfirmedLatitude, $station->latestConfirmedLongitude), 0); ?> м
                                             <?php else : ?>
-                                                <?php echo round($closeByStation->getDistance($station->latestConfirmedLatitude, $station->latestConfirmedLongitude) / 1000, 2); ?> km
+                                                <?php echo round($closeByStation->getDistance($station->latestConfirmedLatitude, $station->latestConfirmedLongitude) / 1000, 2); ?> км
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </span>
@@ -474,7 +474,7 @@
 
         <div class="overview-content-explanations">
             <ul>
-                <li>The specified "Station ID" is the ID that this station has on this website, this ID is useful when creating a link to this website. Read more in the About/FAQ.</li>
+                <li>Вказаний "ідентифікатор станції" - це ідентифікатор, який присвоюється цій станції на цьому веб-сайті. Цей ідентифікатор корисний при створенні посилання на цей веб-сайт. Докладнішу інформацію можна знайти в розділі "Про нас/Часті запитання".</li>
 
                 <?php if ($station->sourceId == 5) : ?>
                     <li>Packets is received from the <a target="_blank" href="http://wiki.glidernet.org/">Open Glider Network</a>. The goal of the Open Glider Network project is to create a unified platform for tracking aircraft equipped with FLARM and OGN trackers.</li>
@@ -491,17 +491,17 @@
                 <?php endif; ?>
 
                 <?php if ($station->sourceId == 1) : ?>
-                    <li>To get a better understanding of the APRS path I recommend reading <a target="_blank" rel="nofollow" href="http://wa8lmf.net/DigiPaths/">the explanation written by wa8lmf</a>.</li>
+                    <li>Для отримання кращого розуміння маршруту APRS я рекомендую прочитати <a target="_blank" rel="nofollow" href="http://wa8lmf.net/DigiPaths/">пояснення, написане wa8lmf</a>.</li>
 
-                    <li>If this packet has the "Posambiguity"-mark it means that the sent position is ambiguous (a configured number of digits has been truncated from the end of the position).</li>
+                    <li>Якщо цей пакет має позначку "Posambiguity" (Невизначеність позиції), це означає, що відправлена позиція є неоднозначною (з кінця позиції було відсічено певну кількість цифр).</li>
 
-                    <li>PHG stands for Power-Height-Gain (and directivity). The height is not the height above sea-level, it is the height above average terrain (HAAT = Height Above Average Terrain). PHG is used to calculate the relative RF range of a station. If this station has reported several positions or symbols the PHG data will only be used for the position and symbol used in the PHG-packet.</li>
+                    <li>PHG означає Power-Height-Gain (та напрямленість). Висота не є висотою над рівнем моря, це висота над середнім рельєфом (HAAT = Height Above Average Terrain). PHG використовується для розрахунку відносного діапазону радіосполучення станції. Якщо ця станція повідомляла кілька позицій або символів, дані PHG будуть використовуватися лише для позиції та символу, використовуваного в PHG-пакеті.</li>
 
-                    <li>RNG is the "pre-calculated omni-directional radio range" of the station (reported by the station itself). If this station has reported several positions or symbols the RNG data will only be used for the position and symbol used in the RNG-packet. It seems like many D-STAR station use the RNG value to specifify D-STAR range.</li>
+                    <li>RNG - це "попередньо розрахований всенапрямний радіус радіостанції" (повідомлений самою станцією). Якщо ця станція повідомляла кілька позицій або символів, дані RNG будуть використовуватися лише для позиції та символу, використовуваного в пакеті RNG. Здається, що багато станцій D-STAR використовують значення RNG для визначення діапазону D-STAR.</li>
 
-                    <li>One object may be sent by several different senders. On the map they may share the same path, but they all have their own "Station information" modal.</li>
+                    <li>Один об'єкт може бути надісланий кількома різними відправниками. На мапі вони можуть ділити один і той же маршрут, але у них є власні окремі "Інформація про станцію" модальні вікна.</li>
 
-                    <li>If station has more than 15 related stations we will only show the 10 closest related stations.</li>
+                    <li>Якщо у станції є більше 15 пов'язаних станцій, ми відображатимемо лише 10 найближчих пов'язаних станцій.</li>
                 <?php endif; ?>
 
                 <?php if ($station->sourceId == 2) : ?>

@@ -1808,13 +1808,13 @@ function getView($request) {
  * @param {string} $key
  * @return string
  * */
-function getWebsiteConfig($key) {
+function getWebsiteConfig(string $key, $default = null) {
     $config = parse_ini_file(ROOT . '/../config/trackdirect.ini', true);
     if (isset($config['website']) && isset($config['website'][$key])) {
         return $config['website'][$key];
     }
 
-    return null;
+    return $default;
 }
 
 /**

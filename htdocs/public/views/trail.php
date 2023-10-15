@@ -5,31 +5,31 @@
     <title><?php echo $station->name; ?> Trail Chart</title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
-            <a class="tdlink" title="Overview" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Overview</a>
-            <a class="tdlink" title="Statistics" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Statistics</a>
-            <span>Trail Chart</span>
-            <a class="tdlink" title="Weather" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Weather</a>
-            <a class="tdlink" title="Telemetry" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Telemetry</a>
-            <a class="tdlink" title="Raw packets" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Raw packets</a>
+            <a class="tdlink" title="Огляд" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Огляд</a>
+            <a class="tdlink" title="Статистика" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Статистика</a>
+            <span>Графік данних</span>
+            <a class="tdlink" title="Погода" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Погода</a>
+            <a class="tdlink" title="Телеметрія" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Телеметрія</a>
+            <a class="tdlink" title="Сирі пакети" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Сирі пакети</a>
         </div>
 
         <div class="horizontal-line">&nbsp;</div>
 
         <p>
-            Show chart for
+            Показати графік за
         </p>
 
 
         <div class="form-container">
             <select id="trail-type" style="float:left; margin-right: 5px;">
-                <option <?php echo (($_GET['type'] ?? 'speed') == 'speed' ? 'selected' : ''); ?> value="speed">Speed</option>
-                <option <?php echo (($_GET['type'] ?? 'speed') == 'altitude' ? 'selected' : ''); ?> value="altitude">Altitude</option>
+                <option <?php echo (($_GET['type'] ?? 'speed') == 'speed' ? 'selected' : ''); ?> value="speed">Швидкість</option>
+                <option <?php echo (($_GET['type'] ?? 'speed') == 'altitude' ? 'selected' : ''); ?> value="altitude">Висота</option>
             </select>
 
             <select id="trail-hours" style="float:left; margin-right: 5px;">
-                <option <?php echo (($_GET['hours'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Latest hour</option>
-                <option <?php echo (($_GET['hours'] ?? 1) == 3 ? 'selected' : ''); ?> value="3">Latest 3 hours</option>
-                <option <?php echo (($_GET['hours'] ?? 1) == 24 ? 'selected' : ''); ?> value="24">Latest 24 hours</option>
+                <option <?php echo (($_GET['hours'] ?? 1) == 1 ? 'selected' : ''); ?> value="1">Останню годину</option>
+                <option <?php echo (($_GET['hours'] ?? 1) == 3 ? 'selected' : ''); ?> value="3">Останні 3 години</option>
+                <option <?php echo (($_GET['hours'] ?? 1) == 24 ? 'selected' : ''); ?> value="24">Останні 24 години</option>
             </select>
         </div>
 
@@ -38,7 +38,7 @@
         <div id="trail-curve-chart" style="width:850px; height: 350px;"></div>
 
         <p>
-            * chart x-axis is based on your timezone (not the timezone of the station).
+            * Горизонтальна вісь діаграми базується на вашому часовому поясі (а не на часовому поясі станції).
         </p>
     </div>
     <script>
@@ -174,7 +174,7 @@
                             });
 
                     } else {
-                        $('#trail-curve-chart').html('<br/><p><i><b>No trail data to create chart from.</b></i></p>');
+                        $('#trail-curve-chart').html('<br/><p><i><b>Немає даних маршруту для створення діаграми.</b></i></p>');
                     }
                 });
             }

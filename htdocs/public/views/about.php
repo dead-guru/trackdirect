@@ -3,31 +3,34 @@
 <title>About / FAQ</title>
 <div class="modal-inner-content modal-inner-content-about" style="padding-bottom: 30px;">
     <div class="modal-inner-content-menu">
-        <span>About</span>
+        <span>Про сайт</span>
         <a href="/views/faq.php" class="tdlink" title="Frequently asked questions">FAQ</a>
     </div>
     <div class="horizontal-line">&nbsp;</div>
 
     <p>
-	Welcome to this APRS tracking website! Our goal is to bring you a fast and easy-to-use map with APRS data from <a href="http://www.aprs-is.net" target="_blank">APRS-IS</a>, <a href="http://www.wxqa.com" target="_blank">CWOP-IS</a>, <a href="https://www.glidernet.org" target="_blank">OGN</a> or some other APRS data sourcei (depending on how this specific website is configured). We give you fast map updates and nice looking APRS symbols!
+        Ласкаво просимо на цей МЕРТВИЙ веб-сайт відстеження APRS! Нашою метою є надання вам швидкої та простою в користуванні карти з даними APRS від <a href="http://www.aprs-is.net" target="_blank">APRS-IS</a>.
+        <br>
+        Цей сайт є частиною <a href="https://dead.guru">dead.guru</a> мережі.
     </p>
 
     <img src="/images/aprs-symbols.png" title="APRS symbols" style="width:100%"/>
 
+
     <p>
-        This website is based on the APRS Track Direct tools. Read more about APRS Track Direct <a href="https://www.aprsdirect.com" target="_blank">here</a> or go directly to <a href="https://github.com/qvarforth/trackdirect" target="_blank">GitHub</a>. In addition to a map with fast APRS data updates, APRS Track direct also provides related functions such as <a href="/views/latest.php" class="tdlink" title="List latest heard stations">Latest heard</a> and <a href="/views/search.php" class="tdlink" title="Search for stations">Station search</a> etc. 
+        Цей веб-сайт базується на інструментах APRS Track Direct. А саме не форку - <a href="https://github.com/dead-guru/trackdirect">https://github.com/dead-guru/trackdirect</a>. Докладніше про APRS Track Direct можна прочитати <a href="https://www.aprsdirect.com" target="_blank">тут</a> або перейти безпосередньо до <a href="https://github.com/dead-guru/trackdirect" target="_blank">GitHub</a>. Окрім карти з швидкими оновленнями даних APRS, APRS Track Direct також надає пов'язані функції, такі як <a href="/views/latest.php" class="tdlink" title="Останні почуті станції">Останні почуті</a> і <a href="/views/search.php" class="tdlink" title="Пошук станцій">Пошук станцій</a> і т. д.
     </p>
 
-    <h3>What is APRS?</h3>
+    <h3>Що таке APRS?</h3>
     <p>
-        APRS (Automatic Packet Reporting System) is a digital communications system that uses packet radio to send real time tactical information (on amateur radio frequencies).
-        The APRS network is used by ham radio operators all over the world.
-        Information shared over the APRS network is for example coordinates, altitude, speed, heading, text messages, alerts, announcements, bulletins and weather data.
-        APRS has been developed by Bob Bruninga, callsign WB4APR.
-	More information about APRS can be found at <a target="_blank" rel="nofollow" href="http://www.aprs.org/">www.aprs.org</a> or at <a target="_blank" rel="nofollow" href="https://en.wikipedia.org/wiki/Automatic_Packet_Reporting_System">wikipedia</a>.
+        APRS (Автоматична Пакетна Система Звітування) - це цифрова система зв'язку, яка використовує пакетне радіо для передачі тактичної інформації в режимі реального часу (на частотах любительського радіозв'язку).
+        Мережа APRS використовується радіоаматорами по всьому світу.
+        Інформація, яку ділять через мережу APRS, включає координати, висоту, швидкість, напрямок, текстові повідомлення, сповіщення, оголошення, бюлетені та погодні дані.
+        APRS була розроблена Бобом Брунінга, позивний WB4APR.
+        Більше інформації про APRS можна знайти на <a target="_blank" rel="nofollow" href="http://www.aprs.org/">www.aprs.org</a> або на <a target="_blank" rel="nofollow" href="https://en.wikipedia.org/wiki/Automatic_Packet_Reporting_System">Вікіпедії</a>.
     </p>
     <p>
-        But as you probably already understood, the APRS specification is not only used by ham radio operators, but also for several other areas of use, such as e.g. for CWOP and OGN data.
+        Але, як ви, ймовірно, вже зрозуміли, специфікація APRS використовується не тільки радіоаматорами, а також для кількох інших галузей, таких як, наприклад, для даних CWOP і OGN.
     </p>
 
 </div>

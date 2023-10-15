@@ -18,27 +18,27 @@
     <title><?php echo $station->name; ?> Weather</title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
-            <a class="tdlink" title="Overview" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Overview</a>
-            <a class="tdlink" title="Statistics" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Statistics</a>
-            <a class="tdlink" title="Trail Chart" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Trail Chart</a>
-            <span>Weather</span>
-            <a class="tdlink" title="Telemetry" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Telemetry</a>
-            <a class="tdlink" title="Raw packets" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Raw packets</a>
+            <a class="tdlink" title="Огляд" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Огляд</a>
+            <a class="tdlink" title="Статистика" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Статистика</a>
+            <a class="tdlink" title="Графік данних" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Графік данних</a>
+            <span>Погода</span>
+            <a class="tdlink" title="Телеметрія" href="/views/telemetry.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Телеметрія</a>
+            <a class="tdlink" title="Сирі пакети" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Сирі пакети</a>
         </div>
 
         <div class="horizontal-line">&nbsp;</div>
 
         <?php if (count($weatherPackets) > 0) : ?>
 
-            <p>This is the latest recevied weather packets stored in our database for station/object <?php echo $station->name; ?>. If no packets are shown the sender has not sent any weather packets the latest <?php echo $maxDays; ?> day(s).</p>
+            <p>Це останній отриманий пакет погодних даних, збережений у нашій базі даних для станції/об'єкта <?php echo $station->name; ?>. Якщо не відображаються жодні пакети, це означає, що відправник не надсилає жодних пакетів погодних даних протягом останніх <?php echo $maxDays; ?> днів.</p>
 
             <div class="form-container">
                 <select id="weather-rows" style="float:left; margin-right: 5px;" class="pagination-rows">
-                    <option <?php echo ($rows == 25 ? 'selected' : ''); ?> value="25">25 rows</option>
-                    <option <?php echo ($rows == 50 ? 'selected' : ''); ?> value="50">50 rows</option>
-                    <option <?php echo ($rows == 100 ? 'selected' : ''); ?> value="100">100 rows</option>
-                    <option <?php echo ($rows == 200 ? 'selected' : ''); ?> value="200">200 rows</option>
-                    <option <?php echo ($rows == 300 ? 'selected' : ''); ?> value="300">300 rows</option>
+                    <option <?php echo ($rows == 25 ? 'selected' : ''); ?> value="25">25 рядків</option>
+                    <option <?php echo ($rows == 50 ? 'selected' : ''); ?> value="50">50 рядків</option>
+                    <option <?php echo ($rows == 100 ? 'selected' : ''); ?> value="100">100 рядків</option>
+                    <option <?php echo ($rows == 200 ? 'selected' : ''); ?> value="200">200 рядків</option>
+                    <option <?php echo ($rows == 300 ? 'selected' : ''); ?> value="300">300 рядків</option>
                 </select>
             </div>
 
@@ -57,14 +57,14 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Time</th>
-                            <th>Temp.</th>
-                            <th>Humidity</th>
-                            <th>Pressure</th>
-                            <th>Rain*</th>
-                            <th>Wind**</th>
-                            <th>Luminosity</th>
-                            <th>Snow</th>
+                            <th>Час</th>
+                            <th>Темп.</th>
+                            <th>Вологість</th>
+                            <th>Тиск</th>
+                            <th>Опади*</th>
+                            <th>Вітер**</th>
+                            <th>Освітленність</th>
+                            <th>Сніг</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -111,7 +111,7 @@
                                         <?php if (isImperialUnitUser()) : ?>
                                             <?php echo round(convertMmToInch($packetWeather->rain_1h), 2); ?> in
                                         <?php else : ?>
-                                            <?php echo round($packetWeather->rain_1h, 2); ?> mm
+                                            <?php echo round($packetWeather->rain_1h, 2); ?> мм
                                         <?php endif; ?>
                                     <?php else : ?>
                                         -
@@ -123,7 +123,7 @@
                                         <?php if (isImperialUnitUser()) : ?>
                                             <?php echo round(convertMmToInch($packetWeather->rain_24h), 2); ?> in
                                         <?php else : ?>
-                                            <?php echo round($packetWeather->rain_24h, 2); ?> mm
+                                            <?php echo round($packetWeather->rain_24h, 2); ?> мм
                                         <?php endif; ?>
                                     <?php else : ?>
                                         -
@@ -135,7 +135,7 @@
                                         <?php if (isImperialUnitUser()) : ?>
                                             <?php echo round(convertMmToInch($packetWeather->rain_since_midnight), 2); ?> in
                                         <?php else : ?>
-                                            <?php echo round($packetWeather->rain_since_midnight, 2); ?> mm
+                                            <?php echo round($packetWeather->rain_since_midnight, 2); ?> мм
                                         <?php endif; ?>
                                     <?php else : ?>
                                         -
@@ -143,7 +143,7 @@
                                 </td>
                             <?php endif; ?>
 
-                            <td title="Wind gust: <?php echo ($packetWeather->wind_gust !== null?round($packetWeather->wind_gust,2):'-'); ?> m/s">
+                            <td title="Wind gust: <?php echo ($packetWeather->wind_gust !== null?round($packetWeather->wind_gust,2):'-'); ?> м/с">
 
                                 <?php if (isImperialUnitUser()) : ?>
                                     <?php if ($packetWeather->wind_speed !== null && $packetWeather->wind_speed > 0) : ?>
@@ -156,9 +156,9 @@
 
                                 <?php else : ?>
                                     <?php if ($packetWeather->wind_speed !== null && $packetWeather->wind_speed > 0) : ?>
-                                        <?php echo round($packetWeather->wind_speed, 2); ?> m/s, <?php echo $packetWeather->wind_direction; ?>&deg;
+                                        <?php echo round($packetWeather->wind_speed, 2); ?> м/с, <?php echo $packetWeather->wind_direction; ?>&deg;
                                     <?php elseif($packetWeather->wind_speed !== null) : ?>
-                                        <?php echo round($packetWeather->wind_speed, 2); ?> m/s
+                                        <?php echo round($packetWeather->wind_speed, 2); ?> м/с
                                     <?php else : ?>
                                         -
                                     <?php endif; ?>
@@ -167,7 +167,7 @@
 
                             <td>
                                 <?php if ($packetWeather->luminosity !== null) : ?>
-                                    <?php echo round($packetWeather->luminosity,0); ?> W/m&sup2;
+                                    <?php echo round($packetWeather->luminosity,0); ?> В/м&sup2;
                                 <?php else : ?>
                                     -
                                 <?php endif; ?>
@@ -178,7 +178,7 @@
                                     <?php if (isImperialUnitUser()) : ?>
                                         <?php echo round(convertMmToInch($packetWeather->snow), 0); ?> in
                                     <?php else : ?>
-                                        <?php echo round($packetWeather->snow, 0); ?> mm
+                                        <?php echo round($packetWeather->snow, 0); ?> мм
                                     <?php endif; ?>
                                 <?php else : ?>
                                     -
@@ -191,20 +191,21 @@
                 </table>
             </div>
             <p>
+
                 <?php if ($weatherPackets[0]->rain_1h !== null) : ?>
-                    * Rain latest hour (hover to see other rain measurements)<br/>
+                    * Опади за останню годину (наведіть, щоб побачити інші вимірювання опадів)<br/>
                 <?php elseif ($weatherPackets[0]->rain_24h !== null) : ?>
-                    * Rain latest 24 hours (hover to see other rain measurements)<br/>
+                    * Опади за останні 24 години (наведіть, щоб побачити інші вимірювання опадів)<br/>
                 <?php else : ?>
-                    * Rain since midnight (hover to see other rain measurements)<br/>
+                    * Опади з півночі (наведіть, щоб побачити інші вимірювання опадів)<br/>
                 <?php endif; ?>
-                ** Current wind speed in m/s (hover to see current wind gust speed)
+                ** Поточна швидкість вітру в м/с (наведіть, щоб побачити поточну швидкість поривів вітру)
             </p>
 
         <?php endif; ?>
 
         <?php if (count($weatherPackets) == 0) : ?>
-            <p><i><b>No recent weather reports.</b></i></p>
+            <p><i><b>Недавніх погодних звітів не знайдено.</b></i></p>
         <?php endif; ?>
 
     </div>

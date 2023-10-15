@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   aprsc:
+    restart: always
     build:
       context: .
       dockerfile: aprsc.dockerfile
@@ -13,6 +14,7 @@ services:
       - $PWD/config/aprsc.conf:/opt/aprsc/etc/aprsc.conf
 
   collector:
+    restart: always
     build:
       context: .
       dockerfile: trackdirect-python.dockerfile
@@ -24,6 +26,7 @@ services:
       - "aprsc"
 
   websocket:
+    restart: always
     build:
       context: .
       dockerfile: trackdirect-python.dockerfile
@@ -37,10 +40,15 @@ services:
       - "aprsc"
 
   web:
+    restart: always
     build:
       context: .
       dockerfile: trackdirect-apache.dockerfile
     volumes:
+      - $PWD/htdocs/public/index.php:/root/trackdirect/htdocs/public/index.php
+      - $PWD/htdocs/public/views:/root/trackdirect/htdocs/public/views
+      - $PWD/htdocs/public/js:/root/trackdirect/htdocs/public/js
+      - $PWD/htdocs/public/css:/root/trackdirect/htdocs/public/css
       - $PWD/config/trackdirect.ini:/root/trackdirect/config/trackdirect.ini
       - $PWD/heatmaps:/root/trackdirect/htdocs/public/heatmaps
     ports:
@@ -49,6 +57,7 @@ services:
       - "db"
 
   db:
+    restart: always
     build:
       context: .
       dockerfile: db.dockerfile
