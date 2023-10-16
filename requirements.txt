@@ -7,5 +7,6 @@ pympler
 image_slicer
 jsmin
 psutil
-geopy
+geojson
+turfpy
 git+https://github.com/rossengeorgiev/aprs-python
