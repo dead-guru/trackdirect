@@ -70,10 +70,13 @@ try {
         <script type="text/javascript" src="//www.gstatic.com/charts/loader.js"></script>
 
         <!-- Stylesheets used by this website (not a dependency for the track direct js lib) -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <!-- Track Direct js dependencies -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script async src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/autolinker/3.14.2/Autolinker.min.js" integrity="sha512-qyoXjTIJ69k6Ik7CxNVKFAsAibo8vW/s3WV3mBzvXz6Gq0yGup/UsdZBDqFwkRuevQaF2g7qhD3E4Fs+OwS4hw==" crossorigin="anonymous"></script>
         <script src="/js/convex-hull.js" crossorigin="anonymous"></script>
@@ -106,6 +109,9 @@ try {
             <script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier-Leaflet/0.2.6/oms.min.js" integrity="sha512-V8RRDnS4BZXrat3GIpnWx+XNYBHQGdK6nKOzMpX4R0hz9SPWt7fltGmmyGzUkVFZUQODO1rE+SWYJJkw3SYMhg==" crossorigin="anonymous"></script>
         <?php endif; ?>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js" integrity="sha512-oh5t+CdSBsaVVAvxcZKy3XJdP7ZbYUBSRCXDTVn0ODewMDDNnELsrG9eDm8rVZAQg7RsDD/8K3MjPAFB13o6eA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
         <!-- Track Direct jslib -->
         <script type="text/javascript" src="/js/trackdirect.min.js"></script>
 
@@ -114,6 +120,8 @@ try {
         <link rel="stylesheet" href="/css/main.css">
 
         <script>
+            const dbstart = moment("");
+
             // Start everything!!!
             $(document).ready(function() {
                 google.charts.load('current', {'packages':['corechart', 'timeline']});
@@ -230,6 +238,13 @@ try {
                         var mapElementId = 'map-container';
 
                         trackdirect.init(wsServerUrl, mapElementId, options);
+
+                        trackdirect.addListener("trackdirect-init-done", function () {
+                            trackdirect._websocket.addListener("server-timestamp-response", function (data) {
+                                $('#svrclock').text(moment(new Date(1000 * data.timestamp)).format('LTS'));
+                                liveData.init();
+                            });
+                        });
                     } else {
                         alert('This service require HTML 5 features to be able to feed you APRS data in real-time. Please upgrade your browser.');
                     }
@@ -365,6 +380,15 @@ try {
                 title="Детальніше про цей сайт!">
                 Про сайт
             </a>
+            <div class="dropdown">
+                <form method="get" id="hdr-search-form" action="">
+                    <input type="hidden" name="seconds" id="hdr-search-form-seconds" value="0">
+                    <input type="text" style="width: 130px;padding-left:10px;margin-top:8px;margin-left:10px;height:20px;text-transform:uppercase;" id="hdr-search-form-q" autocomplete="off" spellcheck="false" autocorrect="off" name="q" placeholder="Пошук...">
+                    <input type="submit" value="Ок" style="margin-top:8px;line-height:0px;padding-left:6px;padding-right:6px">
+                </form>
+            </div>
+
+            <a class="tdlink" id="svrclock" style="float:right">00:00:00</a>
 
             <a href="javascript:void(0);" class="icon" onclick="toggleTopNav()">&#9776;</a>
         </div>

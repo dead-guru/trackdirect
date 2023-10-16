@@ -400,7 +400,7 @@
                         <?php endif; ?>
                     <?php endif; ?>
 
-                    <div>Export <a href="/data/kml.php?id=<?php echo $station->id; ?>"><?php echo htmlspecialchars($station->name); ?></a> данні в KML</div>
+                    <div>Експортувати <a href="/data/kml.php?id=<?php echo $station->id; ?>"><?php echo htmlspecialchars($station->name); ?></a> данні в KML</div>
                 </div>
                 <div style="clear: both;"></div>
             <?php endif; ?>
@@ -542,7 +542,11 @@
                             window.trackdirect.setCenter(<?php echo $station->latestConfirmedLatitude ?>, <?php echo $station->latestConfirmedLongitude ?>);
                         }
                     });
+                window.trackdirect.addListener("trackdirect-init-done", function () {
+                    window.liveData.start("<?php echo $station->name; ?>", <?php echo $station->latestConfirmedPacketTimestamp; ?>, 'overview');
+                });
                 <?php endif; ?>
+                //loadOverviewData(<?php echo $station->id ?>)
             }
         });
     </script>
