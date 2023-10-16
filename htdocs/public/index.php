@@ -92,6 +92,8 @@ try {
         <?php elseif ($mapapi === 'leaflet' || $mapapi === 'leaflet-vector'): ?>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
             <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://unpkg.com/@joergdietrich/leaflet.terminator"></script>
+            <script src="/js/L.Maidenhead.js"></script>
 
             <?php if ($mapapi === 'leaflet-vector'): ?>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/1.13.1/mapbox-gl.min.css" />
@@ -179,6 +181,35 @@ try {
                         // Many providers require a map api key or similar, the following is an example for HERE
                         L.TileLayer.Provider.providers['HERE'].options['app_id'] = '<?php echo getWebsiteConfig('here_app_id'); ?>';
                         L.TileLayer.Provider.providers['HERE'].options['app_code'] = '<?php echo getWebsiteConfig('here_app_code'); ?>';
+                        window.terminator = L.terminator();
+                        window.maiden = L.maidenhead({
+                            color : 'rgba(255, 0, 0, 0.4)',
+                            maxZoom: 9
+                        });
+                        setInterval(function(){updateTerminator(window.terminator)}, 5000);
+                        function updateTerminator(t) {
+                            t.setTime();
+                        }
+                        window.night = false;
+                        window.maidenhead = false;
+                        window.toggleNight = function () {
+                            if(window.night === false) {
+                                window.night = true;
+                                window.terminator.addTo(trackdirect._map);
+                            } else {
+                                window.night = false;
+                                window.terminator.remove();
+                            }
+                        }
+                        window.toggleMaidenhead = function () {
+                            if(window.maidenhead === false) {
+                                window.maidenhead = true;
+                                window.maiden.addTo(trackdirect._map);
+                            } else {
+                                window.maidenhead = false;
+                                window.maiden.remove();
+                            }
+                        }
 
                         options['supportedMapTypes'] = {};
                         options['supportedMapTypes']['roadmap'] = "<?php echo getWebsiteConfig('leaflet_raster_tile_roadmap'); ?>";
@@ -285,6 +316,8 @@ try {
 		<div class="dropdown-content" id="tdTopnavSettings">
                     <a href="javascript:void(0);" onclick="trackdirect.toggleImperialUnits(); $(this).toggleClass('dropdown-content-checkbox-active');" class="dropdown-content-checkbox <?php echo (isImperialUnitUser()?'dropdown-content-checkbox-active':''); ?>" title="Перейти до імперських одиниць">Імперські одиниці</a>
                     <a href="javascript:void(0);" onclick="trackdirect.toggleStationaryPositions(); $(this).toggleClass('dropdown-content-checkbox-active');" class="dropdown-content-checkbox" title="Приховати станції, що не рухаються">Приховати станції, що не рухаються</a>
+                    <a href="javascript:void(0);" onclick="window.toggleNight(); $(this).toggleClass('dropdown-content-checkbox-active');" class="dropdown-content-checkbox">Показати цикл дня</a>
+                    <a href="javascript:void(0);" onclick="window.toggleMaidenhead(); $(this).toggleClass('dropdown-content-checkbox-active');" class="dropdown-content-checkbox">Maidenhead Locator System</a>
 
                     <!--
                     <a href="javascript:void(0);" onclick="trackdirect.toggleInternetPositions(); $(this).toggleClass('dropdown-content-checkbox-active');" class="dropdown-content-checkbox" title="Hide stations that sends packet using TCP/UDP">Hide Internet stations</a>
