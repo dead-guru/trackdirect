@@ -15,6 +15,7 @@ from trackdirect.collector.PacketBatchInserter import PacketBatchInserter
 from trackdirect.exceptions.TrackDirectParseError import TrackDirectParseError
 from trackdirect.database.DatabaseConnection import DatabaseConnection
 from trackdirect.repositories.StationRepository import StationRepository
+from trackdirect.detector.PidorDetector import PidorDetector
 
 #from pympler.tracker import SummaryTracker
 
@@ -59,33 +60,13 @@ class TrackDirectDataCollector():
         self.firstPacketTimestamp = None
         self.latestBatchInsertTimestamp = int(time.time())
 
-        self.block_list = self.fillBlockList()
+        self.pidorDetector = PidorDetector()
 
         self.packets = []
         self.stationIdsWithVisiblePacket = []
         self.movingStationIdsWithVisiblePacket = []
         self.movingMarkerIdsWithVisiblePacket = []
         self.delay = 0
-
-    def fillBlockList(self):
-        """Fill block list with stations that should be ignored
-        """
-        block_list = []
-        ascii_uppercase = list(string.ascii_uppercase)
-        for letter in ascii_uppercase:
-            block_list.append("R" + letter)
-
-        for letter in ascii_uppercase:
-            block_list.append("U" + letter)
-            if letter == "I":
-                break
-
-        for num in range(0, 9):
-            block_list.append("R" + str(num))
-
-        # block_list.append("UU") Crimea
-
-        return block_list
 
     def run(self):
         """Start the collector
@@ -227,9 +208,7 @@ class TrackDirectDataCollector():
         if (packet is None):
             return
 
-        is_it_pidor = any(packet.senderName.startswith(item) for item in self.block_list)
-
-        if (is_it_pidor):
+        if (self.pidorDetector.isPidor(packet.senderName, packet.latitude, packet.longitude)):
             return
 
         # Soft frequency limit check

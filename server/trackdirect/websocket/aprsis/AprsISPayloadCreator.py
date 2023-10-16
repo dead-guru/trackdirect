@@ -14,7 +14,7 @@ from trackdirect.exceptions.TrackDirectParseError import TrackDirectParseError
 
 from trackdirect.websocket.responses.ResponseDataConverter import ResponseDataConverter
 from trackdirect.websocket.responses.HistoryResponseCreator import HistoryResponseCreator
-
+from trackdirect.detector.PidorDetector import PidorDetector
 
 class AprsISPayloadCreator():
     """The AprsISPayloadCreator creates a payload to send to client based on data received form the APRS-IS server
@@ -35,31 +35,11 @@ class AprsISPayloadCreator():
         self.config = trackdirect.TrackDirectConfig()
         self.stationHashTimestamps = {}
 
-        self.block_list = self.fillBlockList()
+        self.pidorDetector = PidorDetector()
 
         self.saveOgnStationsWithMissingIdentity = False
         if (self.config.saveOgnStationsWithMissingIdentity) :
             self.saveOgnStationsWithMissingIdentity = True
-
-    def fillBlockList(self):
-        """Fill block list with stations that should be ignored
-        """
-        block_list = []
-        ascii_uppercase = list(string.ascii_uppercase)
-        for letter in ascii_uppercase:
-            block_list.append("R" + letter)
-
-        for letter in ascii_uppercase:
-            block_list.append("U" + letter)
-            if letter == "I":
-                break
-
-        for num in range(0, 9):
-            block_list.append("R" + str(num))
-
-        # block_list.append("UU") Crimea
-
-        return block_list
 
     def getPayloads(self, line, sourceId):
         """Takes a raw packet and returnes a dict with the parsed result
@@ -76,9 +56,7 @@ class AprsISPayloadCreator():
             if (not self._isPacketValid(packet)) :
                 return
 
-            is_it_pidor = any(packet.senderName.startswith(item) for item in self.block_list)
-
-            if (is_it_pidor):
+            if (self.pidorDetector.isPidor(packet.senderName, packet.latitude, packet.longitude)):
                 return
             if (packet.stationId not in self.state.stationsOnMapDict) :
                 self.state.stationsOnMapDict[packet.stationId] = True
