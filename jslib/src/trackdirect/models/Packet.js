@@ -571,9 +571,9 @@ trackdirect.models.Packet.prototype.getLinkifiedRawPath = function () {
           relatedStationId +
           ", true);" +
           " } else {" +
-          "     alert('Can not go to " +
+          "     alert('Не можу зайти " +
           relatedStationName +
-          ", station has not been heard for a long time.');" +
+          ", станцію давно не чути.');" +
           " }" +
           ' return false;">' +
           relatedStationName +
@@ -625,4 +625,56 @@ trackdirect.models.Packet.prototype.getLinkifiedRawPath = function () {
     return rawPath;
   }
   return null;
+};
+
+/**
+ * Returns packet type as a string
+ * @return {string}
+ */
+trackdirect.models.Packet.prototype.getPacketTypeName = function () {
+  if (
+    typeof this.packet_type_id !== "undefined" &&
+    this.packet_type_id !== null &&
+    this.packet_type_id !== ""
+  ) {
+
+    switch (parseInt(this.packet_type_id)) {
+      case 1:
+        return 'Позиція';
+        break;
+      case 2:
+        return 'Направлення';
+        break;
+      case 3:
+        return 'Погода';
+        break;
+      case 4:
+        return 'Об\'єкт';
+        break;
+      case 5:
+        return 'Item';
+        break;
+      case 6:
+        return 'Телеметрія';
+        break;
+      case 7:
+        return 'Повідомлення';
+        break;
+      case 8:
+        return 'Запит';
+        break;
+      case 9:
+        return 'Відповідь';
+        break;
+      case 10:
+        return 'Статус';
+        break;
+      case 11:
+        return 'Інший';
+        break;
+      default:
+        return 'Unknown';
+        break;
+    }
+  }
 };

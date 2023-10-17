@@ -284,13 +284,13 @@ class Packet extends Model
     {
         switch ($this->packetTypeId) {
         case 1:
-            return 'Position';
+            return 'Позиційний';
                 break;
         case 2:
             return 'Direction';
                 break;
         case 3:
-            return 'Weather';
+            return 'Погодний';
                 break;
         case 4:
             return 'Object';
@@ -299,10 +299,10 @@ class Packet extends Model
             return 'Item';
                 break;
         case 6:
-            return 'Telemetry';
+            return 'Телеметрії';
                 break;
         case 7:
-            return 'Message';
+            return 'Повідомлення';
                 break;
         case 8:
             return 'Query';
@@ -311,13 +311,13 @@ class Packet extends Model
             return 'Response';
                 break;
         case 10:
-            return 'Status';
+            return 'Статусний';
                 break;
         case 11:
-            return 'Other';
+            return 'Інший';
                 break;
         default:
-            return 'Unknown';
+            return 'Невідомий';
                 break;
         }
     }
@@ -372,4 +372,27 @@ class Packet extends Model
     public function getSenderObject() {
         return SenderRepository::getInstance()->getObjectById($this->senderId);
     }
+
+    /**
+     * Get packet equipment type name based on to_call
+     *
+     * @return String
+     */
+    public function getEquipmentTypeName()
+    {
+        $path = explode(',', $this->raw_path);
+        if (sizeof($path) > 1)
+        {
+            $path = explode('-', $path[0]);
+            $pdo = PDOConnection::getInstance();
+            $sql = 'select * from to_calls where callsign = ? or callsign = ? or callsign = ? order by callsign desc limit 1';
+            $stmt = $pdo->prepareAndExec($sql, [$path[0], substr($path[0], 0, 5).'*', substr($path[0], 0, 4) . '**']);
+            $record = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!empty($record) && $record['description'] != null) {
+                return $record['description'];
+            }
+        }
+        return "Unknown Equipment";
+    }
+
 }

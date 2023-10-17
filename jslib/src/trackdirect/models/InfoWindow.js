@@ -497,7 +497,7 @@ trackdirect.models.InfoWindow.prototype._getCompletePacketDiv = function () {
 trackdirect.models.InfoWindow.prototype._getPacketTimeDiv = function () {
   if (this._marker.packet.timestamp == 0) {
     dateString =
-      '<span style="color: grey;">No known packet for specified limits.</span>';
+      '<span style="color: grey;">Немає відомих пакетів для вказаних обмежень.</span>';
   } else {
     var date = new Date(this._marker.packet.timestamp * 1000);
     var dateString = moment(date).format(
@@ -520,7 +520,7 @@ trackdirect.models.InfoWindow.prototype._getPacketTimeDiv = function () {
       this._marker.packet.map_id == 12
     ) {
       dateString +=
-        '<br/><span style="color: grey;">(exact time for this is not known)</span>';
+        '<br/><span style="color: grey;">(точний час невідомий)</span>';
     }
   }
   var timeDiv = $(document.createElement("div"));
@@ -573,7 +573,7 @@ trackdirect.models.InfoWindow.prototype._getPhgDiv = function (phgRange) {
       var phgRangeUnit = "miles";
     } else {
       var phgRange = Math.round(phgRange / 10) / 100; // converted to km
-      var phgRangeUnit = "km";
+      var phgRangeUnit = "км";
     }
     var phgDiv = $(document.createElement("div"));
     phgDiv.attr(
@@ -588,26 +588,26 @@ trackdirect.models.InfoWindow.prototype._getPhgDiv = function (phgRange) {
         this._marker.packet.station_id +
         "-" +
         this._marker.packet.id +
-        "' href='#'>Half</a>"
+        "' href='#'>Половина</a>"
     );
     var fullPhgLink = $(
       "<a style='color: #337ab7;' id='full-phg-" +
         this._marker.packet.station_id +
         "-" +
         this._marker.packet.id +
-        "' href='#'>Full</a>"
+        "' href='#'>Весь</a>"
     );
     var nonePhgLink = $(
       "<a style='color: #337ab7;' id='none-phg-" +
         this._marker.packet.station_id +
         "-" +
         this._marker.packet.id +
-        "' href='#'>None</a>"
+        "' href='#'>Вимк.</a>"
     );
     phgDiv.css("clear", "both");
     phgDiv.css("display", "none");
     phgDiv.css("color", "#440B2A");
-    phgDiv.append("PHG calculated range: " + phgRange + " " + phgRangeUnit);
+    phgDiv.append("PHG розрахований діапазон: " + phgRange + " " + phgRangeUnit);
 
     if (typeof L === "object" && L.version <= "0.7.7") {
       // Skip PHG links for older Leaflet version
@@ -616,7 +616,7 @@ trackdirect.models.InfoWindow.prototype._getPhgDiv = function (phgRange) {
 
     if (phgRange > 0) {
       phgDiv.append("<br/>");
-      phgDiv.append("PHG circle: ");
+      phgDiv.append("PHG коло: ");
       phgDiv.append(fullPhgLink);
       phgDiv.append('<span style="color:#000"> - </span>');
       phgDiv.append(halfPhgLink);
@@ -645,7 +645,7 @@ trackdirect.models.InfoWindow.prototype._getRngDiv = function (rngRange) {
       var rngRangeUnit = "miles";
     } else {
       var rngRange = Math.round(rngRange * 100) / 100; // converted to km
-      var rngRangeUnit = "km";
+      var rngRangeUnit = "км";
     }
     var rngDiv = $(document.createElement("div"));
     rngDiv.attr(
@@ -660,26 +660,26 @@ trackdirect.models.InfoWindow.prototype._getRngDiv = function (rngRange) {
         this._marker.packet.station_id +
         "-" +
         this._marker.packet.id +
-        "' href='#'>Half</a>"
+        "' href='#'>Половина</a>"
     );
     var fullRngLink = $(
       "<a style='color: #337ab7;' id='full-rng-" +
         this._marker.packet.station_id +
         "-" +
         this._marker.packet.id +
-        "' href='#'>Full</a>"
+        "' href='#'>Весь</a>"
     );
     var noneRngLink = $(
       "<a style='color: #337ab7;' id='none-rng-" +
         this._marker.packet.station_id +
         "-" +
         this._marker.packet.id +
-        "' href='#'>None</a>"
+        "' href='#'>Вимк.</a>"
     );
     rngDiv.css("clear", "both");
     rngDiv.css("display", "none");
     rngDiv.css("color", "#440B2A");
-    rngDiv.append("RNG precalculated range: " + rngRange + " " + rngRangeUnit);
+    rngDiv.append("RNG розрахований діапазон: " + rngRange + " " + rngRangeUnit);
 
     if (typeof L === "object" && L.version <= "0.7.7") {
       // Skip RNG links for older Leaflet version
@@ -688,7 +688,7 @@ trackdirect.models.InfoWindow.prototype._getRngDiv = function (rngRange) {
 
     if (rngRange > 0) {
       rngDiv.append("<br/>");
-      rngDiv.append("RNG circle: ");
+      rngDiv.append("RNG коло: ");
       rngDiv.append(fullRngLink);
       rngDiv.append('<span style="color:#000"> - </span>');
       rngDiv.append(halfRngLink);
@@ -722,10 +722,10 @@ trackdirect.models.InfoWindow.prototype._getTransmitDistanceDiv = function (
       transmitDistanceUnit = "miles";
     } else {
       transmitDistance = Math.round(transmitDistance / 100) / 10;
-      transmitDistanceUnit = "km";
+      transmitDistanceUnit = "км";
     }
     transmitDistanceDiv.append(
-      '<span title="Transmit distance to receiving digipeater/igate">Transmit distance: ' +
+      '<span title="Transmit distance to receiving digipeater/igate">Дальність передачі: ' +
         transmitDistance +
         " " +
         transmitDistanceUnit +
@@ -758,7 +758,7 @@ trackdirect.models.InfoWindow.prototype._getTailDistanceDiv = function (
         tailDistanceUnit = "yd";
       } else {
         tailDistance = Math.round(tailDistance);
-        tailDistanceUnit = "m";
+        tailDistanceUnit = "м";
       }
     } else {
       if (this._defaultMap.state.useImperialUnit) {
@@ -771,11 +771,11 @@ trackdirect.models.InfoWindow.prototype._getTailDistanceDiv = function (
         tailDistanceUnit = "miles";
       } else {
         tailDistance = Math.round(tailDistance / 100) / 10;
-        tailDistanceUnit = "km";
+        tailDistanceUnit = "км";
       }
     }
     distanceDiv.append(
-      '<span title="Current shown tail distance (depends on the time settings)">Current tail distance: ' +
+      '<span title="Current shown tail distance (depends on the time settings)">Довжина руху: ' +
         tailDistance +
         " " +
         tailDistanceUnit +
@@ -811,7 +811,7 @@ trackdirect.models.InfoWindow.prototype._getPacketSpeedAltitudeCourseDiv =
             ) + " mph "
           );
         } else {
-          speedDiv.append(Math.round(this._marker.packet.speed) + " km/h ");
+          speedDiv.append(Math.round(this._marker.packet.speed) + " км/г ");
         }
       }
 
@@ -832,7 +832,7 @@ trackdirect.models.InfoWindow.prototype._getPacketSpeedAltitudeCourseDiv =
           );
         } else {
           speedDiv.append(
-            " alt " + Math.round(this._marker.packet.altitude) + " m "
+            " alt " + Math.round(this._marker.packet.altitude) + " м "
           );
         }
       }
@@ -879,26 +879,26 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivRainString = function () {
     } else {
       var rain1h = "-";
       if (isNumeric(this._marker.packet.weather.rain_1h)) {
-        rain1h = Math.round(this._marker.packet.weather.rain_1h) + "mm";
+        rain1h = Math.round(this._marker.packet.weather.rain_1h) + "мм";
       }
       var rain24h = "-";
       if (isNumeric(this._marker.packet.weather.rain_24h)) {
-        rain24h = Math.round(this._marker.packet.weather.rain_24h) + "mm";
+        rain24h = Math.round(this._marker.packet.weather.rain_24h) + "мм";
       }
       var rainSinceMidnight = "-";
       if (isNumeric(this._marker.packet.weather.rain_since_midnight)) {
         rainSinceMidnight =
-          Math.round(this._marker.packet.weather.rain_since_midnight) + "mm";
+          Math.round(this._marker.packet.weather.rain_since_midnight) + "мм";
       }
     }
     return (
-      "<b>Rain</b> " +
+      "<b>Дощ</b> " +
       rain1h +
       "/" +
       rain24h +
       "/" +
       rainSinceMidnight +
-      " (1h/24h/midnight)<br/>"
+      " (1г/24г/midnight)<br/>"
     );
   }
   return null;
@@ -913,7 +913,7 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivTemperatureString =
     if (isNumeric(this._marker.packet.weather.temperature)) {
       if (this._defaultMap.state.useImperialUnit) {
         return (
-          "<b>Temperature</b> " +
+          "<b>Температура</b> " +
           Math.round(
             trackdirect.services.imperialConverter.convertCelciusToFahrenheit(
               this._marker.packet.weather.temperature
@@ -924,7 +924,7 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivTemperatureString =
         );
       } else {
         return (
-          "<b>Temperature</b> " +
+          "<b>Температура</b> " +
           Math.round(this._marker.packet.weather.temperature) +
           "&deg;C" +
           "<br/>"
@@ -942,7 +942,7 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivHumidityString =
   function () {
     if (isNumeric(this._marker.packet.weather.humidity)) {
       return (
-        "<b>Humidity</b> " +
+        "<b>Вологість</b> " +
         Math.round(this._marker.packet.weather.humidity) +
         "%<br/>"
       );
@@ -959,17 +959,17 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivPressureString =
     if (isNumeric(this._marker.packet.weather.pressure)) {
       if (this._defaultMap.state.useImperialUnit) {
         return (
-          "<b>Pressure</b> " +
+          "<b>Тиск</b> " +
           Math.round(
             trackdirect.services.imperialConverter.convertMbarToMmhg(
               this._marker.packet.weather.pressure
             )
           ) +
-          " mmHg<br/>"
+          " ммHg<br/>"
         );
       } else {
         return (
-          "<b>Pressure</b> " +
+          "<b>Тиск</b> " +
           Math.round(this._marker.packet.weather.pressure) +
           " hPa<br/>"
         );
@@ -996,7 +996,7 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivWindString = function () {
     if (this._defaultMap.state.useImperialUnit) {
       if (isNumeric(this._marker.packet.weather.wind_gust)) {
         return (
-          "<b>Wind</b> " +
+          "<b>Вітер</b> " +
           windDir +
           Math.round(
             trackdirect.services.imperialConverter.convertMpsToMph(
@@ -1016,7 +1016,7 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivWindString = function () {
         );
       } else {
         return (
-          "<b>Wind</b> " +
+          "<b>Вітер</b> " +
           windDir +
           Math.round(
             trackdirect.services.imperialConverter.convertMpsToMph(
@@ -1030,20 +1030,20 @@ trackdirect.models.InfoWindow.prototype._getWeatherDivWindString = function () {
     } else {
       if (isNumeric(this._marker.packet.weather.wind_gust)) {
         return (
-          "<b>Wind</b> " +
+          "<b>Вітер</b> " +
           windDir +
           Math.round(this._marker.packet.weather.wind_speed * 10) / 10 +
-          " m/s" +
+          " м/с" +
           " (" +
           Math.round(this._marker.packet.weather.wind_gust * 10) / 10 +
-          " m/s)<br/>"
+          " м/с)<br/>"
         );
       } else {
         return (
-          "<b>Wind</b> " +
+          "<b>Вітер</b> " +
           windDir +
           Math.round(this._marker.packet.weather.wind_speed * 10) / 10 +
-          " m/s <br/>"
+          " м/с <br/>"
         );
       }
     }
@@ -1070,15 +1070,18 @@ trackdirect.models.InfoWindow.prototype._getWeatherDiv = function () {
   weatherDateString = moment(weatherDate).format(
     trackdirect.settings.dateFormatNoTimeZone
   );
-  weatherDiv.append("<b>Latest Weather</b>  " + weatherDateString + "<br/>");
+
+  var weatherData = $(document.createElement("fieldset"));
+  weatherData.append("<legend><a href='' onclick='loadView(\"/views/weather.php?id="+this._marker.packet.station_id +"&imperialUnits="+(this._defaultMap.state.useImperialUnit ? "1":"0")+"\");return false;'>Latest Weather</a> -  " + weatherDateString + "</legend>");
 
   if (!trackdirect.isMobile && $(window).height() >= 300) {
-    weatherDiv.append(this._getWeatherDivTemperatureString());
-    weatherDiv.append(this._getWeatherDivHumidityString());
-    weatherDiv.append(this._getWeatherDivPressureString());
-    weatherDiv.append(this._getWeatherDivRainString());
-    weatherDiv.append(this._getWeatherDivWindString());
+    weatherData.append(this._getWeatherDivTemperatureString());
+    weatherData.append(this._getWeatherDivHumidityString());
+    weatherData.append(this._getWeatherDivPressureString());
+    weatherData.append(this._getWeatherDivRainString());
+    weatherData.append(this._getWeatherDivWindString());
   }
+  weatherDiv.append(weatherData);
   return weatherDiv;
 };
 
@@ -1097,7 +1100,7 @@ trackdirect.models.InfoWindow.prototype._getTelemetryDiv = function () {
   telemetryDateString = moment(telemetryDate).format(
     trackdirect.settings.dateFormatNoTimeZone
   );
-  telemetryDiv.append("Latest Telemetry  " + telemetryDateString + "<br/>");
+  telemetryDiv.append("<a href='' onclick='loadView(\"/views/telemetry.php?id="+this._marker.packet.station_id +"&imperialUnits="+(this._defaultMap.state.useImperialUnit ? "1":"0")+"\");return false;'>Latest Telemetry</a>  " + telemetryDateString + "<br/>");
 
   return telemetryDiv;
 };
@@ -1361,7 +1364,7 @@ trackdirect.models.InfoWindow.prototype._getMenuDivFilterLink = function () {
         this._defaultMap.getZoom()
     );
   } else {
-    menuLink.html("Filter");
+    menuLink.html("Фільтр");
     menuLink.attr("href", "/sid/" + this._marker.packet.station_id);
   }
   menuLi.append(menuLink);
@@ -1395,9 +1398,9 @@ trackdirect.models.InfoWindow.prototype._getMenuDivCoverageLink = function () {
     this._marker.packet.station_id
   );
   if (coveragePolygon !== null && coveragePolygon.isRequestedToBeVisible()) {
-    menuLink.html("Hide Coverage");
+    menuLink.html("Сховати Покриття");
   } else {
-    menuLink.html("Coverage");
+    menuLink.html("Покриття");
   }
   menuLi.append(menuLink);
   return menuLi;
@@ -1433,7 +1436,7 @@ trackdirect.models.InfoWindow.prototype._getMenuDivCenterLink = function (
         this._marker.packet.longitude +
         "); return false;"
     );
-    menuLink.html("Center");
+    menuLink.html("Центрувати");
   } else {
     menuLink.attr(
       "href",
@@ -1450,7 +1453,7 @@ trackdirect.models.InfoWindow.prototype._getMenuDivCenterLink = function (
         this._marker.packet.marker_id +
         "); return false;"
     );
-    menuLink.html("Focus");
+    menuLink.html("Фокус");
   }
   menuLi.append(menuLink);
   return menuLi;
@@ -1485,7 +1488,7 @@ trackdirect.models.InfoWindow.prototype._getMenuDivZoomLink = function (
         this._marker.packet.longitude +
         ", 14); return false;"
     );
-    menuLink.html("Zoom");
+    menuLink.html("Збільшити");
   } else {
     menuLink.attr(
       "href",
@@ -1501,7 +1504,7 @@ trackdirect.models.InfoWindow.prototype._getMenuDivZoomLink = function (
         this._marker.packet.marker_id +
         ", 14); return false;"
     );
-    menuLink.html("Zoom");
+    menuLink.html("Збільшити");
   }
   menuLi.append(menuLink);
   return menuLi;
@@ -1596,7 +1599,7 @@ trackdirect.models.InfoWindow.prototype._getCompactMainDiv = function () {
     var distanceDiv = $(document.createElement("div"));
     distanceDiv.css("clear", "both");
     distanceDiv.css("padding-top", "4px");
-    distanceDiv.append("Tail distance: ");
+    distanceDiv.append("Дистанція треку: ");
     if (tailDistance < 1000) {
       if (this._defaultMap.state.useImperialUnit) {
         distanceDiv.append(
@@ -1607,7 +1610,7 @@ trackdirect.models.InfoWindow.prototype._getCompactMainDiv = function () {
           ) + " yd "
         );
       } else {
-        distanceDiv.append(Math.round(tailDistance) + " m ");
+        distanceDiv.append(Math.round(tailDistance) + " м ");
       }
     } else {
       if (this._defaultMap.state.useImperialUnit) {
@@ -1621,7 +1624,7 @@ trackdirect.models.InfoWindow.prototype._getCompactMainDiv = function () {
             " miles "
         );
       } else {
-        distanceDiv.append(Math.round(tailDistance / 100) / 10 + " km ");
+        distanceDiv.append(Math.round(tailDistance / 100) / 10 + " км ");
       }
     }
 

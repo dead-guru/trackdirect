@@ -375,11 +375,35 @@ try {
                 </div>
             </div>
 
-            <a href="/views/about.php"
-                class="tdlink"
-                title="Детальніше про цей сайт!">
-                Про сайт
-            </a>
+            <div class="dropdown">
+                <button class="dropbtn">Інформація
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/views/about.php"
+                       class="tdlink"
+                       title="Інформація про цей сайт!">
+                        Про сайт
+                    </a>
+                    <a href="/views/faq.php"
+                       class="tdlink"
+                       title="Часті запитання.">
+                        FAQ
+                    </a>
+                    <a href="/views/site_statistics.php"
+                       class="tdlink"
+                       title="Site database information!">
+                        Статистика
+                    </a>
+                    <?php if (getWebsiteConfig('aprs_is_status_url')): ?>
+                        <a href="/views/server_health.php?server=aprs"
+                           class="tdlink"
+                           title="Статус APRS-IS (aprsc) серверу">
+                            Статус APRS-IS серверу
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
             <div class="dropdown">
                 <form method="get" id="hdr-search-form" action="">
                     <input type="hidden" name="seconds" id="hdr-search-form-seconds" value="0">

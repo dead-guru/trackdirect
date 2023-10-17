@@ -1,6 +1,6 @@
 <?php
 if (!defined('ROOT')) {
-    define('ROOT', dirname(dirname(__FILE__)));
+    define('ROOT', dirname(__DIR__));
 
     require_once ROOT . '/includes/autoload.php';
     require_once ROOT . '/includes/common.php';

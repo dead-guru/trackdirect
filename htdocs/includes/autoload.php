@@ -6,7 +6,7 @@
  * @param  string $className
  * @return null
  */
-function __autoload_trackdirect($className)
+function php8__autoload($className)
 {
 
     if (file_exists(ROOT . '/includes/' . strtolower($className) . '.class.php')) {
@@ -22,4 +22,4 @@ function __autoload_trackdirect($className)
         error_log(sprintf('Could not find class %s', $className));
     }
 }
-spl_autoload_register('__autoload_trackdirect');
+spl_autoload_register('php8__autoload');

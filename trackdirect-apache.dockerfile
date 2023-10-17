@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
   inkscape \
   && rm -rf /var/lib/apt/lists/*
 
+RUN a2enmod rewrite
+
 #COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 RUN pecl install imagick && docker-php-ext-enable imagick && docker-php-ext-install pdo pdo_pgsql && docker-php-ext-install gd && docker-php-ext-enable gd

@@ -1,11 +1,17 @@
 <?php require dirname(__DIR__) . "../../includes/bootstrap.php"; ?>
 
-<?php $station = StationRepository::getInstance()->getObjectById($_GET['id'] ?? null); ?>
+<?php
+if (isset($_GET['c'])) {
+    $station = StationRepository::getInstance()->getObjectByName(strtoupper($_GET['c']) ?? null);
+} else {
+    $station = StationRepository::getInstance()->getObjectById($_GET['id'] ?? null);
+}
+?>
 <?php if ($station->isExistingObject()) : ?>
     <title><?php echo $station->name; ?> Огляд</title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
-            <span>Overview</span>
+            <span>Огляд</span>
             <a class="tdlink" title="Статистика" href="/views/statistics.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Статистика</a>
             <a class="tdlink" title="Графік данних" href="/views/trail.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Графік данних</a>
             <a class="tdlink" title="Погода" href="/views/weather.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Погода</a>
@@ -107,7 +113,7 @@
 
                 <div>
                     <div class="overview-content-summary-hr">Останній пакет:</div>
-                    <div class="overview-content-summary-cell-type overview-content-summary-indent"><?php echo $latestPacket->getPacketTypeName(); ?> Пакет</div>
+                    <div class="overview-content-summary-cell-type overview-content-summary-indent">Пакет <?php echo $latestPacket->getPacketTypeName(); ?></div>
                 </div>
 
                 <?php $latestPacketSender = SenderRepository::getInstance()->getObjectById($latestPacket->senderId); ?>
@@ -146,6 +152,11 @@
                 <div>
                     <div class="overview-content-summary-hr-indent">Шлях:</div>
                     <div class="overview-content-summary-cell-path overview-content-summary-indent" title="Останній шлях"><?php echo $latestPacket->rawPath; ?></div>
+                </div>
+
+                <div>
+                    <div class="overview-content-summary-hr-indent">Обладнання:</div>
+                    <div class="overview-content-summary-cell-path overview-content-summary-indent" title="Останнє використане обладнання"><?php echo $latestPacket->getEquipmentTypeName(); ?></div>
                 </div>
 
                 <?php if ($latestPacket->comment != '') : ?>
@@ -368,17 +379,25 @@
             <?php endif; ?>
 
 
-            <!-- Packet Frequency -->
-            <?php $packetFrequencyNumberOfPackets = null; ?>
-            <?php $stationPacketFrequency = $station->getPacketFrequency(null, $packetFrequencyNumberOfPackets); ?>
-            <?php if ($stationPacketFrequency != null) : ?>
+            <!-- Packet Frequency & Totals-->
+            <div class="overview-content-divider"></div>
+            <div>
+                <div class="overview-content-summary-hr">Packet frequency:</div>
+                <div class="overview-content-packet-frequency" title="Calculated packet frequency" id="packet_frequency"><span>calculating ...</span></div>
+            </div>
+            <div>
+                <div class="overview-content-summary-hr">Packets stored:</div>
+                <div class="overview-content-packet-frequency" title="Total packets recorded" id="total_packets"><span>retrieving ...</span></div>
+            </div>
+            <?php $stationLatestBulletinPacket = PacketRepository::getInstance()->getBulletinObjectListByStationId($station->id, 1, 0, 2);?>
+            <?php if ($stationLatestBulletinPacket != null) : ?>
                 <div class="overview-content-divider"></div>
                 <div>
-                    <div class="overview-content-summary-hr">Частота пакетів:</div>
-                    <div class="overview-content-packet-frequency" title="Розрахована частота пакетів"><span><?php echo $stationPacketFrequency; ?></span> <span>(Останні <?php echo $packetFrequencyNumberOfPackets; ?> пакетів)</span></div>
+                    <div class="overview-content-summary-hr">Latest bulletin:</div>
+                    <div class="overview-content-packet-frequency" title="Latest bulletin"><span><?php echo $stationLatestBulletinPacket[0]->to_call; ?>: <?php echo $stationLatestBulletinPacket[0]->comment; ?></span> (<span id="bulletin-timestamp"><?php echo $stationLatestBulletinPacket[0]->timestamp; ?></span>)</div>
                 </div>
             <?php endif; ?>
-
+            <br/><span style="float:left;width:400px;"><img src="/images/dotColor3.svg" style="height:24px;vertical-align:middle;" id="live-img" /><span id="live-status" style="vertical-align:middle;">Waiting for connection...</span></span>
 
             <div class="overview-content-divider"></div>
         </div>
@@ -435,13 +454,20 @@
             <?php if (count($closeByStations) > 1) : ?>
                 <div>
                     <div class="overview-content-summary-hr">Поблизу розташовані станції/об'єкти:</div>
-                    <div class="overview-content-station-list" title="Найближчі станції/об'єкти на поточній позиції">
+                    <div class="overview-content-station-list" title="Найближчі станції/об'єкти на поточній позиції"  style="width:100%">
+                        &nbsp;
+                        <span>
+                          <span class="nts" style="width:10.4em"><b>Last Received</b></span>
+                          <span style="width:7.7em"><b>Distance</b></span>
+                      </span>
+                        <br/>
                         <?php foreach ($closeByStations as $closeByStation) : ?>
                             <?php if ($closeByStation->id != $station->id) : ?>
 
                                 <img src="<?php echo $closeByStation->getIconFilePath(22, 22); ?>" alt="Символ"/>&nbsp;
                                 <span>
                                     <a class="tdlink" href="/views/overview.php?id=<?php echo $closeByStation->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>"><?php echo htmlentities($closeByStation->name) ?></a>
+                                    <span class="nts"><?php echo $closeByStation->latestPacketTimestamp; ?></span>
                                     <span>
                                         <?php if (isImperialUnitUser()) : ?>
                                             <?php if (convertMeterToYard($closeByStation->getDistance($station->latestConfirmedLatitude, $station->latestConfirmedLongitude)) < 1000) : ?>
@@ -512,11 +538,16 @@
 
             </ul>
         </div>
+        <div class="quiklink">
+            Link directly to this page: <input id="quiklink" type="text" value="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"; ?>/station/<?php echo $station->name; ?>/" readonly>
+            <img id="quikcopy" src="/images/copy.svg"/>
+        </div>
     </div>
 
     <script>
         $(document).ready(function() {
             var locale = window.navigator.userLanguage || window.navigator.language;
+            latest_packet_timestamp = <?php echo $station->latestPacketTimestamp; ?>;
             moment.locale(locale);
 
             $('#overview-content-comment, #overview-content-beacon, #overview-content-status').each(function() {
@@ -525,7 +556,7 @@
                 }
             });
 
-            $('#latest-timestamp, #comment-timestamp, #status-timestamp, #beacon-timestamp, #position-timestamp, #weather-timestamp, #telemetry-timestamp').each(function() {
+            $('#latest-timestamp, #comment-timestamp, #status-timestamp, #beacon-timestamp, #position-timestamp, #weather-timestamp, #telemetry-timestamp, #bulletin-timestamp, .nts').each(function() {
                 if ($(this).html().trim() != '' && !isNaN($(this).html().trim())) {
                     $(this).html(moment(new Date(1000 * $(this).html())).format('L LTSZ'));
                 }
@@ -539,14 +570,15 @@
                 <?php if ($station->latestConfirmedLatitude != null && $station->latestConfirmedLongitude != null) : ?>
                     window.trackdirect.addListener("map-created", function() {
                         if (!window.trackdirect.focusOnStation(<?php echo $station->id ?>, true)) {
-                            window.trackdirect.setCenter(<?php echo $station->latestConfirmedLatitude ?>, <?php echo $station->latestConfirmedLongitude ?>);
+                            window.trackdirect.setCenter(<?php echo $station->latestPacketTimestamp ?>, <?php echo $station->latestConfirmedLongitude ?>);
                         }
                     });
                 window.trackdirect.addListener("trackdirect-init-done", function () {
                     window.liveData.start("<?php echo $station->name; ?>", <?php echo $station->latestConfirmedPacketTimestamp; ?>, 'overview');
                 });
                 <?php endif; ?>
-                //loadOverviewData(<?php echo $station->id ?>)
+                loadOverviewData(<?php echo $station->id ?>);
+                quikLink();
             }
         });
     </script>

@@ -178,10 +178,10 @@ var liveData = {
     if (moduleName == 'livefeed') this.liveFeed();
 
     if (window.trackdirect.getTimeTravelTimestamp()==null) {
-      $("#live-img").attr("src", "/public/images/dotColor4.svg");
+      $("#live-img").attr("src", "/images/dotColor4.svg");
       $("#live-status").text("Connected to server, live updates enabled.");
     } else {
-      $("#live-img").attr("src", "/public/images/dotColor2.svg");
+      $("#live-img").attr("src", "/images/dotColor2.svg");
       $("#live-status").text("Time travel active, live updates unavailable.");
     }
   },

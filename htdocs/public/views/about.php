@@ -1,10 +1,18 @@
-<?php require dirname(__DIR__) . "../../includes/bootstrap.php"; ?>
+<?php require dirname(__DIR__) . "../../includes/bootstrap.php";
+$server = $_GET['server'] ?? '';
+$status_url = '';
+if ($server != '') {
+    $status_url = getWebsiteConfig($server."_is_status_url");
+}
+?>
 
-<title>About / FAQ</title>
+<title>Інформація / Часті запитання</title>
 <div class="modal-inner-content modal-inner-content-about" style="padding-bottom: 30px;">
     <div class="modal-inner-content-menu">
         <span>Про сайт</span>
-        <a href="/views/faq.php" class="tdlink" title="Frequently asked questions">FAQ</a>
+        <a href="/views/faq.php" class="tdlink" title="Часті запитання">Часті запитання</a>
+        <a href="/views/site_statistics.php" class="tdlink" title="Website and server statistics!">Статистика</a>
+        <?php if (getWebsiteConfig('aprs_is_status_url') && $server != 'aprs'): ?><a href="/views/server_health.php?server=aprs" class="tdlink" title="Статус APRS серверу">Статус APRS серверу</a><?php else: ?><span>Статус APRS серверу</span><?php endif; ?>
     </div>
     <div class="horizontal-line">&nbsp;</div>
 

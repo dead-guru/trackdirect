@@ -9,4 +9,4 @@ jsmin
 psutil
 geojson
 turfpy
-git+https://github.com/rossengeorgiev/aprs-python
+git+https://github.com/shackrat/aprs-python

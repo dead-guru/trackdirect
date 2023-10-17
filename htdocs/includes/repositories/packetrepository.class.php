@@ -47,14 +47,115 @@ class PacketRepository extends ModelRepository
      * @param  int $offset
      * @return array
      */
-    public function getObjectListWithRawByStationId($stationId, $limit, $offset)
+    public function getObjectListWithRawByStationId($stationId, $limit, $offset, $startAt=null, $endAt=null)
     {
         if (!isInt($stationId) || !isInt($limit) || !isInt($offset)) {
             return [];
         }
-        $sql = 'select packet.* from packet packet where station_id = ? and timestamp > ? and raw is not null order by timestamp desc, id desc limit ? offset ?';
-        $parameters = [$stationId, time() - (24*60*60), $limit, $offset];
+        $startTime = $startAt ?? (time() - 24*60*60);
+        $endTime = $endAt ?? time();
+
+        $sql = 'select packet.* from packet packet where station_id = ? and timestamp > ?  and timestamp < ? and raw is not null order by timestamp desc, id desc limit ? offset ?';
+        $parameters = [$stationId, $startTime, $endTime, $limit, $offset];
         return $this->getObjectListFromSql($sql, $parameters);
+    }
+
+    /**
+     * Get message object list by station id and to call sign for the latest $maxDays days
+     *
+     * @param  int $stationId
+     * @param  string $toStationCall - Call sign of the station
+     * @param  int $limit
+     * @param  int $offset
+     * @param  int $maxDays - Optioanl number of days (prior to now) of data to return
+     * @return array
+     */
+    public function getMessageObjectListByStationIdAndCall($stationId, $toStationCall, $limit, $offset=0, $maxDays=7)
+    {
+        if (!isInt($stationId) || !isInt($limit) || !isInt($offset) || !isInt($maxDays) || empty($toStationCall)) {
+            return [];
+        }
+
+        $sql = "select packet.* from packet packet where packet_type_id = 7 and timestamp > ? and ((station_id = ? and to_call NOT LIKE '%BLN%') or to_call = ?) order by timestamp desc, id desc limit ? offset ?";
+        $parameters = [time() - (86400*$maxDays), $stationId, $toStationCall, $limit, $offset];
+        return $this->getObjectListFromSql($sql, $parameters);
+    }
+
+    /**
+     * Get the number of messages by station id and to call sign for the latest $maxDays days
+     *
+     * @param  int $stationId
+     * @param  string $toStationCall - Call sign of the station
+     * @param  int $maxDays - Optioanl number of days (prior to now) of data to return
+     * @return int
+     */
+    public function getNumberOfMessagesByStationIdAndCall($stationId, $toStationCall, $maxDays = 7)
+    {
+        if (!isInt($stationId) || !isInt($maxDays) || empty($toStationCall)) {
+            return 0;
+        }
+
+        $sql = "select count(*) c from packet where packet_type_id = 7 and timestamp > ? and ((station_id = ? and to_call NOT LIKE '%BLN%') or to_call = ?)";
+        $parameters = [time() - (86400*$maxDays), $stationId, $toStationCall];
+
+        $pdo = PDOConnection::getInstance();
+        $stmt = $pdo->prepareAndExec($sql, $parameters);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $sum = 0;
+        foreach($rows as $row) {
+            $sum += $row['c'];
+        }
+
+        return $sum;
+    }
+
+    /**
+     * Get bulletin object list by station id for the latest $maxDays days
+     *
+     * @param  int $stationId
+     * @param  int $limit
+     * @param  int $offset
+     * @param  int $maxDays - Optioanl number of days (prior to now) of data to return
+     * @return array
+     */
+    public function getBulletinObjectListByStationId($stationId, $limit, $offset=0, $maxDays = 7)
+    {
+        if (!isInt($stationId) || !isInt($limit) || !isInt($offset) || !isInt($maxDays)) {
+            return [];
+        }
+
+        $sql = "select packet.* from packet packet where station_id = ? and packet_type_id = 7 and timestamp > ? and to_call LIKE '%BLN%' order by timestamp desc, id desc limit ? offset ?";
+        $parameters = [$stationId, time() - (86400*$maxDays), $limit, $offset];
+        return $this->getObjectListFromSql($sql, $parameters);
+    }
+
+    /**
+     * Get object list with raw by station id for the latest $maxDays days
+     *
+     * @param  int $stationId
+     * @param  int $maxDays - Optioanl number of days (prior to now) of data to return
+     * @return int
+     */
+    public function getNumberOfBulletinsByStationId($stationId, $maxDays = 7)
+    {
+        if (!isInt($stationId) || !isInt($maxDays)) {
+            return 0;
+        }
+
+        $sql = "select count(*) c from packet where station_id = ? and packet_type_id = 7 and timestamp > ? and to_call LIKE '%BLN%'";
+        $parameters = [$stationId, time() - (86400*$maxDays)];
+
+        $pdo = PDOConnection::getInstance();
+        $stmt = $pdo->prepareAndExec($sql, $parameters);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $sum = 0;
+        foreach($rows as $row) {
+            $sum += $row['c'];
+        }
+
+        return $sum;
     }
 
     /**
@@ -63,13 +164,16 @@ class PacketRepository extends ModelRepository
      * @param  int $stationId
      * @return int
      */
-    public function getNumberOfPacketsWithRawByStationId($stationId)
+    public function getNumberOfPacketsWithRawByStationId($stationId, $startAt=null, $endAt=null)
     {
         if (!isInt($stationId)) {
             return 0;
         }
-        $sql = 'select count(*) c from packet where station_id = ? and timestamp > ? and raw is not null';
-        $parameters = [$stationId, time() - (24*60*60)];
+        $startTime = $startAt ?? (time() - 24*60*60);
+        $endTime = $endAt ?? time();
+
+        $sql = 'select count(*) c from packet where station_id = ? and timestamp > ? and timestamp < ? and raw is not null';
+        $parameters = [$stationId, $startTime, $endTime];
 
         $pdo = PDOConnection::getInstance();
         $stmt = $pdo->prepareAndExec($sql, $parameters);
@@ -91,13 +195,16 @@ class PacketRepository extends ModelRepository
      * @param  int $offset
      * @return array
      */
-    public function getObjectListWithRawBySenderStationId($stationId, $limit, $offset)
+    public function getObjectListWithRawBySenderStationId($stationId, $limit, $offset, $startAt=null, $endAt=null)
     {
         if (!isInt($stationId) || !isInt($limit) || !isInt($offset)) {
             return [];
         }
-        $sql = 'select packet.* from packet where sender_id in (select latest_sender_id from station where id = ?) and timestamp > ? and raw is not null order by timestamp desc, id desc limit ? offset ?';
-        $parameters = [$stationId, time() - (24*60*60), $limit, $offset];
+        $startTime = $startAt ?? (time() - 24*60*60);
+        $endTime = $endAt ?? time();
+
+        $sql = 'select packet.* from packet where sender_id in (select latest_sender_id from station where id = ?) and timestamp > ? and timestamp < ? and raw is not null order by timestamp desc, id desc limit ? offset ?';
+        $parameters = [$stationId, $startTime, $endTime, $limit, $offset];
         return $this->getObjectListFromSql($sql, $parameters);
     }
 
@@ -107,13 +214,16 @@ class PacketRepository extends ModelRepository
      * @param  int $stationId
      * @return int
      */
-    public function getNumberOfPacketsWithRawBySenderStationId($stationId)
+    public function getNumberOfPacketsWithRawBySenderStationId($stationId, $startAt=null, $endAt=null)
     {
         if (!isInt($stationId)) {
             return 0;
         }
-        $sql = 'select count(*) c from packet where sender_id in (select latest_sender_id from station where id = ?) and timestamp > ? and raw is not null';
-        $parameters = [$stationId, time() - (24*60*60)];
+        $startTime = $startAt ?? (time() - 24*60*60);
+        $endTime = $endAt ?? time();
+
+        $sql = 'select count(*) c from packet where sender_id in (select latest_sender_id from station where id = ?) and timestamp > ? and timestamp < ? and raw is not null';
+        $parameters = [$stationId, $startTime, $endTime];
 
         $pdo = PDOConnection::getInstance();
         $stmt = $pdo->prepareAndExec($sql, $parameters);

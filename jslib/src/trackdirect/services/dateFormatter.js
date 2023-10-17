@@ -67,22 +67,22 @@ trackdirect.services.dateFormatter = {
 
     var timeAgoList = [];
     if (days > 1) {
-      timeAgoList.push(days + " days");
+      timeAgoList.push(days + " дні(в)");
     } else if (days > 0) {
-      timeAgoList.push(days + " day");
+      timeAgoList.push(days + " день");
     }
     if (hours > 1) {
       timeAgoList.push(hours + " hours");
     } else if (hours > 0) {
-      timeAgoList.push(hours + " hour");
+      timeAgoList.push(hours + " годину");
     }
     if (minutes > 1) {
       timeAgoList.push(minutes + " minutes");
     } else if (minutes > 0) {
-      timeAgoList.push(minutes + " minute");
+      timeAgoList.push(minutes + " хвилину");
     }
     if (seconds == 1) {
-      timeAgoList.push(seconds + " second");
+      timeAgoList.push(seconds + " секунду");
     } else {
       timeAgoList.push(seconds + " seconds");
     }
@@ -90,7 +90,7 @@ trackdirect.services.dateFormatter = {
     if (timeAgoList.length > 1) {
       return (
         timeAgoList.slice(0, timeAgoList.length - 1).join(", ") +
-        " and " +
+        " і " +
         timeAgoList[timeAgoList.length - 1]
       );
     } else {

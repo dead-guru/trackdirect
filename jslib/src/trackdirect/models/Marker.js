@@ -713,6 +713,22 @@ trackdirect.models.Marker.prototype.shouldMarkerBeVisible = function () {
     return false;
   }
 
+  if (
+    this.packet.source_id == 3 &&
+    !this._defaultMap.state.isCbAprsMarkersVisible
+  ) {
+    // CBAPRS stations should not be visible
+    return false;
+  }
+
+  if (
+    this.packet.source_id == 5 &&
+    !this._defaultMap.state.isOgnMarkersVisible
+  ) {
+    // OGN stations should not be visible
+    return false;
+  }
+
   if (!this._defaultMap.state.isStationaryMarkersVisible) {
     if (!this.isMovingStation()) {
       return false;
@@ -948,7 +964,7 @@ trackdirect.models.Marker.prototype.getToolTipContent = function () {
       '<span style="font-weight: bold; font-family: Helvetica; font-size: 10px; line-height: 22px; margin-left: 5px; margin-right: 25px">' +
       escapeHtml(this.packet.station_name) +
       "</span></div>" +
-      '<div style="clear:both; font-family: Helvetica; font-size: 9px;">Sent by ' +
+      '<div style="clear:both; font-family: Helvetica; font-size: 9px;">Через ' +
       escapeHtml(this.packet.sender_name) +
       "</div>" +
       '<div style="clear:both; font-family: Helvetica; font-size: 9px;">' +

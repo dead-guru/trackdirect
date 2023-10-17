@@ -210,6 +210,11 @@ a {
   display: block;
 }
 
+#td-modal-content {
+  height: 100%;
+}
+
+
 /* Modal Content */
 .modal-content, .modal-long-content {
   background-color: #fff;
@@ -274,6 +279,18 @@ a {
 }
 
 input[type=text], select, textarea {
+  padding: 2px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+select {
+  -webkit-padding-before: 4px;
+  -webkit-padding-after: 5px;
+  -webkit-appearance: none;
+}
+
+input[type=text], select, textarea {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -307,6 +324,7 @@ input[type=submit]:hover {
 
 #cordinates-container {
   clear: both;
+  padding-top:5px;
   color: #4d4d4d;
   font-size: 11px;
   display: none;
@@ -314,6 +332,7 @@ input[type=submit]:hover {
 }
 
 #status-container {
+  padding-top:5px;
   white-space:nowrap;
   line-height: 20px;
   font-size: 11px;
@@ -526,6 +545,57 @@ input[type=submit]:hover {
   height: 20px;
 }
 
+.quiklink {
+  margin-top: 20px;
+  padding: 4px;
+  background: #eeeeee;
+}
+.quiklink input[type=text] {
+  width: 400px;
+  pading: 2px;
+  height: 22px;
+}
+.quiklink img {
+  height: 20px;
+  vertical-align: middle;
+}
+#titlebar {
+  width: calc(100% - 10px);
+  padding:4px;
+  vertical-align: middle;
+  background-color:#bbbbbb;
+  border:1px solid black;
+}
+#titlebar img {
+  height:24px;
+  vertical-align: middle;
+}
+#titlebar span {
+  vertical-align: middle;
+}
+#titlebar form a b {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 4px;
+  line-height:0px;
+  height:16px;
+  color: white;
+  background-color: #4CAF50;
+}
+#raw-content-output, #live-content-output {
+  background-color: black;
+  color:#dddddd;
+  padding:6px;
+  overflow: scroll;
+}
+#raw-content-output {
+  height:calc(100% - 239px);
+}
+#live-content-output {
+  height:calc(100% - 195px);
+}
+
 #raw-content-output p {
     white-space: nowrap;
     margin-top: 0px;
@@ -535,6 +605,12 @@ input[type=submit]:hover {
     line-height: normal;
     clear: both;
 }
+
+.raw-hidden {
+  padding: 8px 4px 4px 4px;
+  display: none;
+}
+
 
 #raw-content-output a {
     font-weight: bold;

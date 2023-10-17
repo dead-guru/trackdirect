@@ -357,7 +357,7 @@ var trackdirect = {
     if (this._map.state.trackStationId !== null) {
       var trackLinkElementClass =
         "trackStationLink" + this._map.state.trackStationId;
-      $("." + trackLinkElementClass).html("Track");
+      $("." + trackLinkElementClass).html("Слідкувати");
     }
 
     this._map.state.onlyTrackRecentPackets = onlyTrackRecentPackets;
@@ -445,7 +445,7 @@ var trackdirect = {
     if (coveragePolygon !== null && coveragePolygon.isRequestedToBeVisible()) {
       coveragePolygon.hide();
       if (coverageLinkElementClass !== null) {
-        $("." + coverageLinkElementClass).html("Coverage");
+        $("." + coverageLinkElementClass).html("Покриття");
       }
     } else {
       if (coveragePolygon !== null) {
@@ -480,7 +480,7 @@ var trackdirect = {
 
         if (coverageLinkElementClass !== null) {
           $("." + coverageLinkElementClass).html(
-            'Loading <i class="fa fa-spinner fa-spin" style="font-size:12px"></i>'
+            'Завантаження <i class="fa fa-spinner fa-spin" style="font-size:12px"></i>'
           );
           coveragePolygon.addTdListener(
             "visible",
@@ -490,9 +490,9 @@ var trackdirect = {
                 alert(
                   "Currently we do not have enough data to create a max range coverage plot for this station. Try again later!"
                 );
-                $("." + coverageLinkElementClass).html("Coverage");
+                $("." + coverageLinkElementClass).html("Покриття");
               } else {
-                $("." + coverageLinkElementClass).html("Hide coverage");
+                $("." + coverageLinkElementClass).html("Сховати");
               }
             },
             true
@@ -514,8 +514,8 @@ var trackdirect = {
         })
           .fail(function () {
             coveragePolygon.hide();
-            alert("Failed to fetch coverage data. Try again later!");
-            $("." + coverageLinkElementClass).html("Coverage");
+            alert("Помилка Спробуйте пізніше!");
+            $("." + coverageLinkElementClass).html("Покриття");
           })
           .always(function () {});
       }
@@ -802,6 +802,32 @@ var trackdirect = {
   },
 
   /**
+   * Toggle the CBAPRS positions option
+   * @return None
+   */
+  toggleCbAprsPositions: function () {
+    if (this.isCbAprsMarkersVisible()) {
+      this._map.state.isCbAprsMarkersVisible = false;
+    } else {
+      this._map.state.isCbAprsMarkersVisible = true;
+    }
+    this._map.showHideMarkers();
+  },
+
+  /**
+   * Toggle the OGN positions option
+   * @return None
+   */
+  toggleOgnPositions: function () {
+    if (this.isOgnMarkersVisible()) {
+      this._map.state.isOgnMarkersVisible = false;
+    } else {
+      this._map.state.isOgnMarkersVisible = true;
+    }
+    this._map.showHideMarkers();
+  },
+
+  /**
    * Toggle the ghost positions option
    * Ghost positions are positions that some filter has removed since it is unlikly
    * @return None
@@ -829,6 +855,22 @@ var trackdirect = {
    */
   isCwopMarkersVisible: function () {
     return this._map.state.isCwopMarkersVisible;
+  },
+
+  /**
+   * Returns true if CBAPRS markers is visible
+   * @return {boolean}
+   */
+  isCbAprsMarkersVisible: function () {
+    return this._map.state.isCbAprsMarkersVisible;
+  },
+
+  /**
+   * Returns true if OGN markers are visible
+   * @return {boolean}
+   */
+  isOgnMarkersVisible: function () {
+    return this._map.state.isOgnMarkersVisible;
   },
 
   /**
@@ -931,7 +973,7 @@ var trackdirect = {
       // We want to stop filtering
       this.stopFilterOnStationId(stationId);
       if (filterLinkElementClass !== null) {
-        $("." + filterLinkElementClass).html("Filter");
+        $("." + filterLinkElementClass).html("Фільтрувати");
       }
     } else {
       this.filterOnStationId(stationId);
@@ -960,7 +1002,7 @@ var trackdirect = {
     ) {
       // We want to stop tracking
       if (trackLinkElementClass !== null) {
-        $("." + trackLinkElementClass).html("Track");
+        $("." + trackLinkElementClass).html("Слідкувати");
       } else if (this._map.state.openInfoWindow !== null) {
         this._map.state.openInfoWindow.hide();
       }
@@ -1687,7 +1729,7 @@ var trackdirect = {
 
       // If we for some reason have infoWindow open and doesn't close it, update link name
       var filterLinkElementClass = "filterStationLink" + stationId;
-      $("." + filterLinkElementClass).html("Filter");
+      $("." + filterLinkElementClass).html("Фільтрувати");
 
       // We only hide the marker since it may exist in a station transmit event
       for (var markerIdKey in map.markerCollection.getStationMarkerIdKeys(
@@ -2104,7 +2146,7 @@ var trackdirect = {
   _setWebsocketStateConnecting: function () {
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Connecting")
+        .html("Підключення")
         .css("color", "blue");
     }
   },
@@ -2118,7 +2160,7 @@ var trackdirect = {
 
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Connected")
+        .html("Підключено")
         .css("color", "green");
     }
   },
@@ -2130,7 +2172,7 @@ var trackdirect = {
   _setWebsocketStateError: function () {
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Disconnected")
+        .html("Відключено")
         .css("color", "red");
     }
 
@@ -2140,7 +2182,7 @@ var trackdirect = {
     var me = this;
     if (
       confirm(
-        "You have been disconnected, this can be caused by a network error, by the timeout limit or if maintenance occurs while you’re logged in. Do you want to reconnect?"
+        "Ви були відключені. Це може бути викликано помилкою мережі, вичікуванням обмеження часу або проведенням технічних робіт, поки ви були підключені. Бажаєте відновити підключення?"
       )
     ) {
       me._websocket = new trackdirect.Websocket(me._wsServerUrl);
@@ -2167,7 +2209,7 @@ var trackdirect = {
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
         .html(
-          'Loading <i class="fa fa-spinner fa-spin" style="font-size:14px"></i>'
+          'Завантаження <i class="fa fa-spinner fa-spin" style="font-size:14px"></i>'
         )
         .css("color", "green");
     }
@@ -2180,7 +2222,7 @@ var trackdirect = {
   _setWebsocketStateLoadingDone: function () {
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Complete")
+        .html("Готово")
         .css("color", "green");
     }
   },
@@ -2193,7 +2235,7 @@ var trackdirect = {
     // APRS-IS Connection is up for this area!
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Connected to APRS feed")
+        .html("Підключено до APRS-IS")
         .css("color", "green");
     }
   },
@@ -2206,7 +2248,7 @@ var trackdirect = {
     // Waiting for APRS-IS Connection
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Waiting for APRS feed")
+        .html("Очікую APRS сервер")
         .css("color", "green");
     }
   },
@@ -2219,7 +2261,7 @@ var trackdirect = {
     // We are zoomed out and not doing anything
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Idle")
+        .html("Пауза")
         .css("color", "green");
     }
   },
@@ -2231,7 +2273,7 @@ var trackdirect = {
   _setWebsocketStateInactive: function () {
     if (this._statusContainerElementId !== null) {
       $("#" + this._statusContainerElementId)
-        .html("Inactive")
+        .html("Неактивно")
         .css("color", "orange");
     }
 
@@ -2240,7 +2282,7 @@ var trackdirect = {
     var me = this;
     if (
       confirm(
-        "No activity for a long time, map updates has been stopped. Do you want to reconnect?"
+        "Довго немає активності, оновлення карти призупинено. Бажаєте відновити підключення?"
       )
     ) {
       me._websocket = new trackdirect.Websocket(me._wsServerUrl);
@@ -2343,19 +2385,19 @@ var trackdirect = {
    */
   _deactivateFiltered: function (sendNewRequest) {
     // Reset Time travel
-    this.setTimeTravelTimestamp(null);
+    //this.setTimeTravelTimestamp(null);
 
     // clear everything
     this._map.resetAllMarkers();
 
     if (this._map.state.openInfoWindow !== null) {
-      this._map.state.openInfoWindow.hide();
+      //this._map.state.openInfoWindow.hide();
     }
     this._map.deactivateFilteredMode();
 
     // If we was tracking one station that we was filtering on, stop tracking it
     this.stopTrackStation();
-    this.setTimeLength(this.settings.defaultTimeLength, false);
+    //this.setTimeLength(this.settings.defaultTimeLength, false);
 
     this._emitEventListeners("filter-changed", []);
     this._emitEventListeners("filter-stopped");

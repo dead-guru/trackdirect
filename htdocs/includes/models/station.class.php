@@ -73,20 +73,20 @@ class Station extends Model
     {
         $ognDevice = $this->getOgnDevice();
         if ($ognDevice) {
-             switch ($ognDevice->ddbAircraftType) {
-            case 1:
-                return 'Glider/Motoglider';
-            case 2:
-                return 'Plane';
-            case 3:
-                return 'Ultralight';
-            case 4:
-                return 'Helicopter';
-            case 5:
-                return 'Drone/UAV';
-            case 6:
-                return 'Other';
-             }
+            switch ($ognDevice->ddbAircraftType) {
+                case 1:
+                    return 'Glider/Motoglider';
+                case 2:
+                    return 'Plane';
+                case 3:
+                    return 'Ultralight';
+                case 4:
+                    return 'Helicopter';
+                case 5:
+                    return 'Drone/UAV';
+                case 6:
+                    return 'Other';
+            }
         }
         return null;
     }
@@ -100,36 +100,36 @@ class Station extends Model
     {
         if (isset($this->latestOgnAircraftTypeId) && $this->latestOgnAircraftTypeId != '') {
             switch ($this->latestOgnAircraftTypeId) {
-            case 1:
-                return 'Glider';
-            case 2:
-                return 'Tow Plane';
-            case 3:
-                return 'Helicopter';
-            case 4:
-                return 'Parachute';
-            case 5:
-                return 'Drop Plane';
-            case 6:
-                return 'Hang Glider';
-            case 7:
-                return 'Para Glider';
-            case 8:
-                return 'Powered Aircraft';
-            case 9:
-                return 'Jet Aircraft';
-            case 10:
-                return 'UFO';
-            case 11:
-                return 'Balloon';
-            case 12:
-                return 'Airship';
-            case 13:
-                return 'UAV';
-            case 14:
-                return '';
-            case 15:
-                return 'Static Object';
+                case 1:
+                    return 'Glider';
+                case 2:
+                    return 'Tow Plane';
+                case 3:
+                    return 'Helicopter';
+                case 4:
+                    return 'Parachute';
+                case 5:
+                    return 'Drop Plane';
+                case 6:
+                    return 'Hang Glider';
+                case 7:
+                    return 'Para Glider';
+                case 8:
+                    return 'Powered Aircraft';
+                case 9:
+                    return 'Jet Aircraft';
+                case 10:
+                    return 'UFO';
+                case 11:
+                    return 'Balloon';
+                case 12:
+                    return 'Airship';
+                case 13:
+                    return 'UAV';
+                case 14:
+                    return '';
+                case 15:
+                    return 'Static Object';
             }
         }
         return null;
@@ -147,6 +147,8 @@ class Station extends Model
                 return '<a target="_blank" rel="nofollow" href="http://www.aprs-is.net/">APRS-IS</a>';
             } elseif ($this->sourceId == 2) {
                 return '<a target="_blank" rel="nofollow" href="http://wxqa.com/">CWOP (Citizen Weather Observer Program)</a>';
+            } elseif ($this->sourceId == 3) {
+                return '<a target="_blank" rel="nofollow" href="http://www.cbaprs.de">CBAPRS (Citizen Band APRS)</a>';
             } elseif ($this->sourceId == 5) {
                 return '<a target="_blank" rel="nofollow" href="http://wiki.glidernet.org/">OGN (Open Glider Network)</a>';
             }
@@ -297,6 +299,25 @@ class Station extends Model
         if (!empty($record) && $record['freq'] > 0) {
             $numberOfPackets = $record['c'];
             return $record['freq'];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get total packets recorded for the station
+     *
+     * @return int
+     */
+    public function getTotalPackets()
+    {
+        $pdo = PDOConnection::getInstance();
+
+        $sql = 'select count(id) c from packet where station_id = ?';
+        $stmt = $pdo->prepareAndExec($sql, [$this->id]);
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!empty($record) && $record['c'] > 0) {
+            return $record['c'];
         } else {
             return null;
         }

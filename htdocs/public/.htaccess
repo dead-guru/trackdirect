@@ -13,6 +13,12 @@ RewriteEngine on
 # Avoid rewriting existing dirs
 RewriteRule ^/?(js|css|images|symbols|data|heatmaps|crossdomain.*|favicon.*|\.well-known|browserconfig\.xml|robots\.txt|ads\.txt)($|/) - [L]
 
+RewriteCond %{REQUEST_URI} ^/station/.*
+RewriteRule ^station/([A-Za-z0-9\-]+)/?$ /views/overview.php?c=$1 [QSA,L]
+RewriteRule ^station/([A-Za-z0-9\-]+)/(messages|bulletins)/$ /views/messages.php?c=$1&format=$2 [QSA,L]
+RewriteRule ^station/([A-Za-z0-9\-]+)/([A-Za-z0-9]+)/$ /views/$2.php?c=$1 [QSA,L]
+RewriteRule ^station/([A-Za-z0-9\-]+)/([A-Za-z0-9]+)/([A-Za-z0-9]+)/$ /views/$2.php?c=$1&format=$3 [QSA,L]
+
 # Rewrite url
 RewriteCond %{REQUEST_METHOD} !=POST
 RewriteRule ^(.*)$ index.php?view=$1 [NC,L,QSA]
