@@ -12,7 +12,6 @@ class PidorDetector(Singleton):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.blackList = self._fillBlackList()
-        print ([f for f in os.listdir() if os.path.isfile(f)])
         file_path = os.path.join(os.path.dirname(__file__), "russia.json")
         with open(file_path, "r") as f:
             data = json.load(f)
@@ -39,6 +38,8 @@ class PidorDetector(Singleton):
 
         # block_list.append("UU") Crimea
         block_list.append("MOSCOW")
+
+        self.logger.info(block_list)
 
         return block_list
 

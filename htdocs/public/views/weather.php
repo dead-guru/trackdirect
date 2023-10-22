@@ -1,21 +1,40 @@
 <?php require dirname(__DIR__) . "../../includes/bootstrap.php"; ?>
 
-<?php $station = StationRepository::getInstance()->getObjectById($_GET['id'] ?? null); ?>
+<?php
+if (isset($_GET['c'])) {
+    $station = StationRepository::getInstance()->getObjectByName(strtoupper($_GET['c']) ?? null);
+} else {
+    $station = StationRepository::getInstance()->getObjectById($_GET['id'] ?? null);
+}
+?>
 <?php if ($station->isExistingObject()) : ?>
     <?php
-        $maxDays = 10;
-        if (!isAllowedToShowOlderData()) {
-            $maxDays = 1;
-        }
-        $page = $_GET['page'] ?? 1;
-        $rows = $_GET['rows'] ?? 25;
-        $offset = ($page - 1) * $rows;
+    $maxDays = 10;
+    $format = $_GET['format'] ?? 'table';
+    $start = $_GET['start'] ?? time()-864000;
+    $end = $_GET['end'] ?? time();
+    $page = $_GET['page'] ?? 1;
+    $rows = $_GET['rows'] ?? 25;
+    $offset = ($page - 1) * $rows;
+    $pages = 0;
+
+    $graphLabels = array('Time', 'Temperature', 'Humidity', 'Pressure', 'Rain (Last Hour)', 'Rain (Last 24 Hours)', 'Rain (Since Midnight)', 'Wind Speed', 'Wind Direction', 'Luminosity', 'Snow');
+    $missingGraphs = [];
+    if ($format === 'table') {
         $weatherPackets = PacketWeatherRepository::getInstance()->getLatestObjectListByStationIdAndLimit($station->id, $rows, $offset, $maxDays);
         $count = PacketWeatherRepository::getInstance()->getLatestNumberOfPacketsByStationIdAndLimit($station->id, $maxDays);
         $pages = ceil($count / $rows);
+    }
+
+
+    if ($format === 'graph') {
+        $weatherPackets = PacketWeatherRepository::getInstance()->getLatestObjectListByStationIdAndLimit($station->id, 1, 0, $maxDays);
+    }
+
+    $titles = array('graph' => 'Графік', 'table' => 'Таблиця');
     ?>
 
-    <title><?php echo $station->name; ?> Weather</title>
+    <title><?php echo $station->name; ?> <?php echo $titles[$format]; ?></title>
     <div class="modal-inner-content">
         <div class="modal-inner-content-menu">
             <a class="tdlink" title="Огляд" href="/views/overview.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Огляд</a>
@@ -26,10 +45,96 @@
             <a class="tdlink" title="Сирі пакети" href="/views/raw.php?id=<?php echo $station->id ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ?? 0; ?>">Сирі пакети</a>
         </div>
 
+        <div class="horizontal-line" style="margin:0">&nbsp;</div>
+
+        <div class="modal-inner-content-menu" style="margin-left:25px;">
+            <?php if ($format !== 'table'): ?><a class="tdlink" href="/views/weather.php?id=<?php echo $station->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ;?>&format=table"><?php echo $titles['table']; ?></a><?php else: ?><span><?php echo $titles['table']; ?></span><?php endif; ?>
+            <?php if ($format !== 'graph'): ?><a class="tdlink" href="/views/weather.php?id=<?php echo $station->id; ?>&imperialUnits=<?php echo $_GET['imperialUnits'] ;?>&format=graph"><?php echo $titles['graph']; ?></a><?php else: ?><span><?php echo $titles['graph']; ?></span><?php endif; ?>
+        </div>
+
         <div class="horizontal-line">&nbsp;</div>
 
         <?php if (count($weatherPackets) > 0) : ?>
+            <p>Це останні отримані пакети погодних даних, збережені у нашій базі даних для станції/об'єкта <?php echo $station->name; ?>. Якщо не відображаються жодні пакети, це означає, що станція не надсилає жодних погодних пакетів протягом останніх <?php echo $maxDays; ?> днів.</p>
 
+            <div style="float:left;line-height: 28px;">
+                <?php if ($format == 'graph'): ?>
+                    <span style="float:left;">Данні за <span id="oldest-timestamp" style="font-weight:bold;"></span> по <span id="latest-timestamp" style="font-weight:bold;"></span>.  <span id="records"></span> (макс 1000)</span>
+                <?php endif; ?>
+                  <script type="text/javascript">
+                          $('#oldest-timestamp, #latest-timestamp').each(function() {
+                              if ($(this).html().trim() != '' && !isNaN($(this).html().trim())) {
+                                  $(this).html(moment(new Date(1000 * $(this).html())).format('L LTS'));
+                              }
+                          });
+                  </script>
+
+            </div>
+
+            <div style="clear:both;"></div>
+
+        <?php if ($format === 'graph'): ?>
+        <?php for ($graphIdx = 1; $graphIdx < 11; $graphIdx++) : ?>
+        <?php
+        if (
+            ($graphIdx == 1 && $weatherPackets[0]->temperature === null) ||
+            ($graphIdx == 2 && $weatherPackets[0]->humidity === null) ||
+            ($graphIdx == 3 && $weatherPackets[0]->pressure === null) ||
+            ($graphIdx == 4 && $weatherPackets[0]->rain_1h === null) ||
+            ($graphIdx == 5 && $weatherPackets[0]->rain_24h === null) ||
+            ($graphIdx == 6 && $weatherPackets[0]->rain_since_midnight === null) ||
+            ($graphIdx == 7 && $weatherPackets[0]->wind_speed === null) ||
+            ($graphIdx == 8 && $weatherPackets[0]->wind_direction === null) ||
+            ($graphIdx == 9 && $weatherPackets[0]->luminosity === null) ||
+            ($graphIdx == 10 && $weatherPackets[0]->snow === null)
+        ) {
+            $missingGraphs[] = $graphIdx;
+            continue;
+        }
+        ?>
+            <div style="width:100%;background:#dddddd;padding:2px;font-weight:bold;"><?php echo $station->name; ?> [<?php echo $graphLabels[$graphIdx]; ?>]</div>
+            <canvas id="graph_<?php echo $graphIdx; ?>" height="80"></canvas>
+            <div style="height:20px;"></div>
+        <?php endfor; ?>
+
+        <?php if (count($missingGraphs)) : ?>
+            <p>Станція <b><?php echo $station->name; ?></b> не передавала або ще не передала данних за період:</p>
+            <ul>
+                <?php
+                foreach ($missingGraphs as $graphId) {
+                    echo '<li>'.$graphLabels[$graphId].'</li>';
+                }
+                ?>
+            </ul>
+        <?php endif; ?>
+
+            <script type="text/javascript">
+                initGraph(10);
+                $(document).ready(function() {
+                    for (let i = 1; i < 11; i++) {
+                        if (window['chart_'+i] != null) {
+                            $.getJSON('/data/graph.php?id=<?php echo $station->id ?>&type=weather&start=<?php echo $start; ?>&end=<?php echo $end; ?>&index=' + i).done(function(response) {
+                                $('#oldest-timestamp').text(response.oldest_timestamp);
+                                $('#latest-timestamp').text(response.latest_timestamp);
+                                $('#oldest-timestamp, #latest-timestamp').each(function() {
+                                    if ($(this).html().trim() != '' && !isNaN($(this).html().trim())) {
+                                        $(this).html(moment(new Date(1000 * $(this).html())).format('L LTS'));
+                                    }
+                                });
+                                $('#records').text(response.records + ' знайдено');
+
+                                window['chart_'+i].data.datasets[0].data = response.data;
+                                window['chart_'+i].data.datasets[0].label = response.label;
+                                if (response.borderColor != null) window['chart_'+i].data.datasets[0].borderColor = response.borderColor;
+                                if (response.borderColor != null) window['chart_'+i].data.datasets[0].backgroundColor = response.backgroundColor;
+                                window['chart_'+i].update();
+                            });
+                        }
+                    }
+                });
+            </script>
+        <?php endif; ?>
+        <?php if ($format == 'table'): ?>
             <p>Це останній отриманий пакет погодних даних, збережений у нашій базі даних для станції/об'єкта <?php echo $station->name; ?>. Якщо не відображаються жодні пакети, це означає, що відправник не надсилає жодних пакетів погодних даних протягом останніх <?php echo $maxDays; ?> днів.</p>
 
             <div class="form-container">
@@ -56,16 +161,16 @@
             <div class="datagrid datagrid-weather" style="max-width:1000px;">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Час</th>
-                            <th>Темп.</th>
-                            <th>Вологість</th>
-                            <th>Тиск</th>
-                            <th>Опади*</th>
-                            <th>Вітер**</th>
-                            <th>Освітленність</th>
-                            <th>Сніг</th>
-                        </tr>
+                    <tr>
+                        <th>Час</th>
+                        <th>Темп.</th>
+                        <th>Вологість</th>
+                        <th>Тиск</th>
+                        <th>Опади*</th>
+                        <th>Вітер**</th>
+                        <th>Освітленність</th>
+                        <th>Сніг</th>
+                    </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($weatherPackets as $packetWeather) : ?>
@@ -204,11 +309,23 @@
 
         <?php endif; ?>
 
-        <?php if (count($weatherPackets) == 0) : ?>
+        <?php if (count($weatherPackets) === 0) : ?>
             <p><i><b>Недавніх погодних звітів не знайдено.</b></i></p>
         <?php endif; ?>
 
+        <?php endif; ?>
+
+        <?php if (count($weatherPackets) === 0) : ?>
+            <p><i><b>Недавніх погодних звітів не знайдено.</b></i></p>
+        <?php endif; ?>
+
+        <div class="quiklink">
+            Пряме посилання на цю сторінку: <input id="quiklink" type="text" value="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"; ?>/station/<?php echo $station->name; ?>/<?php echo basename(__FILE__, '.php'); ?>/<?php echo $format; ?>/" readonly>
+            <img id="quikcopy" src="/images/copy.svg"/>
+        </div>
+
     </div>
+
 
     <script>
         $(document).ready(function() {
@@ -225,16 +342,24 @@
                 loadView("/views/weather.php?id=<?php echo $station->id ?>&rows=" + $('#weather-rows').val() + "&page=1");
             });
 
+            <?php if ($format=='table'): ?>
+
+            <?php endif; ?>
 
             if (window.trackdirect) {
                 <?php if ($station->latestConfirmedLatitude != null && $station->latestConfirmedLongitude != null) : ?>
-                    window.trackdirect.addListener("map-created", function() {
-                        if (!window.trackdirect.focusOnStation(<?php echo $station->id ?>, true)) {
-                            window.trackdirect.setCenter(<?php echo $station->latestConfirmedLatitude ?>, <?php echo $station->latestConfirmedLongitude ?>);
-                        }
-                    });
+                window.trackdirect.addListener("map-created", function() {
+                    if (!window.trackdirect.focusOnStation(<?php echo $station->id ?>, true)) {
+                        window.trackdirect.setCenter(<?php echo $station->latestConfirmedLatitude ?>, <?php echo $station->latestConfirmedLongitude ?>);
+                    }
+                });
                 <?php endif; ?>
+                window.trackdirect.addListener("trackdirect-init-done", function () {
+                    window.liveData.start("<?php echo $station->name;?>", <?php echo $station->latestPacketTimestamp; ?>, 'wxcurrent');
+                });
             }
+
+            quikLink();
         });
     </script>
 <?php endif; ?>

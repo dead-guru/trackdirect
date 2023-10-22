@@ -1074,13 +1074,13 @@ trackdirect.models.InfoWindow.prototype._getWeatherDiv = function () {
   var weatherData = $(document.createElement("fieldset"));
   weatherData.append("<legend><a href='' onclick='loadView(\"/views/weather.php?id="+this._marker.packet.station_id +"&imperialUnits="+(this._defaultMap.state.useImperialUnit ? "1":"0")+"\");return false;'>Latest Weather</a> -  " + weatherDateString + "</legend>");
 
-  if (!trackdirect.isMobile && $(window).height() >= 300) {
+  //if (/*!trackdirect.isMobile && */$(window).height() >= 300) {
     weatherData.append(this._getWeatherDivTemperatureString());
     weatherData.append(this._getWeatherDivHumidityString());
     weatherData.append(this._getWeatherDivPressureString());
     weatherData.append(this._getWeatherDivRainString());
     weatherData.append(this._getWeatherDivWindString());
-  }
+  //}
   weatherDiv.append(weatherData);
   return weatherDiv;
 };

@@ -539,7 +539,7 @@ if (isset($_GET['c'])) {
             </ul>
         </div>
         <div class="quiklink">
-            Link directly to this page: <input id="quiklink" type="text" value="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"; ?>/station/<?php echo $station->name; ?>/" readonly>
+            Пряме посилання на цю сторінку: <input id="quiklink" type="text" value="<?php echo (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]"; ?>/station/<?php echo $station->name; ?>/" readonly>
             <img id="quikcopy" src="/images/copy.svg"/>
         </div>
     </div>
