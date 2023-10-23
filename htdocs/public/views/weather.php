@@ -18,7 +18,7 @@ if (isset($_GET['c'])) {
     $offset = ($page - 1) * $rows;
     $pages = 0;
 
-    $graphLabels = array('Time', 'Temperature', 'Humidity', 'Pressure', 'Rain (Last Hour)', 'Rain (Last 24 Hours)', 'Rain (Since Midnight)', 'Wind Speed', 'Wind Direction', 'Luminosity', 'Snow');
+    $graphLabels = array('Час', 'Температруа', 'Вологість', 'Тиск', 'Дощ (Останній Час)', 'Дощ (Остання доба)', 'Дощ (З початку доби)', 'Швидкість вітру', 'Напрям вітру', 'Освітлення', 'Сніг');
     $missingGraphs = [];
     if ($format === 'table') {
         $weatherPackets = PacketWeatherRepository::getInstance()->getLatestObjectListByStationIdAndLimit($station->id, $rows, $offset, $maxDays);

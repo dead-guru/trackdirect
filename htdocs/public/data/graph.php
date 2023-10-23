@@ -76,7 +76,7 @@ if ($station->isExistingObject()) {
 
 
     if ($graphType === 'weather') {       // No more than 1000 rows for graphs
-        $graphLabels = array('Time', 'Temperature', 'Humidity', 'Pressure', 'Rain (Last Hour)', 'Rain (Last 24 Hours)', 'Rain (Since Midnight)', 'Wind Speed', 'Wind Direction', 'Luminosity', 'Snow');
+        $graphLabels = array('Час', 'Температруа', 'Вологість', 'Тиск', 'Дощ (Останній Час)', 'Дощ (Остання доба)', 'Дощ (З початку доби)', 'Швидкість вітру', 'Напрям вітру', 'Освітлення', 'Сніг');
         $weatherPackets = PacketWeatherRepository::getInstance()->getLatestObjectListByStationIdAndLimit($station->id, 1000, 0, $maxDays, $startAt, $endAt);
 
         // Ajax graph data
